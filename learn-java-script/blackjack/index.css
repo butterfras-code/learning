@@ -38,12 +38,15 @@ button:hover {
 #start-btn {
     background: goldenrod;
     color: white;
+    display:inline-block;
 }
 #reset-btn {
     background: darkred;
     color: white;
+    display: none;
 }
 #new-card-btn {
     background: darkgreen;
     color: white;
+    display: none;
 }

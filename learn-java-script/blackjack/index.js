@@ -19,7 +19,12 @@ function dealCards() {
 }
 
 function randomCard() {
-    let card=Math.floor(Math.random()*10)+2
+    let card=Math.floor( Math.random()*13 ) + 1
+    if (card>10) {
+        card=10
+    } else if (card===1) {
+        card=11
+    }   
     return card
 }
 
@@ -47,12 +52,18 @@ function renderGame(player) {
        // while (isAlive && !hasBlackjack) {
         if (sum <= 20) {
         message="Do you want to draw a new card?"
+        document.getElementById("new-card-btn").style.display="inline"
+        document.getElementById("start-btn").style.display="none"
     } else if (sum === 21) {
         hasBlackjack=true
         message="You've got Blackjack!"
+        document.getElementById("new-card-btn").style.display="none"
+        document.getElementById("reset-btn").style.display="inline"
     } else {
         isAlive=false
         message="You're out of the game!"
+        document.getElementById("new-card-btn").style.display="none"
+        document.getElementById("reset-btn").style.display="inline"
     }
     messageEl.textContent=message
     // }
@@ -72,4 +83,8 @@ function resetGame() {
     messageEl.textContent="Want to play a round?"
     sumEl.textContent="Sum: "
     cardsEl.textContent="Cards: "
+    document.getElementById("start-btn").style.display="inline"
+    document.getElementById("reset-btn").style.display="none"
+    document.getElementById("new-card-btn").style.display="none"
+
 }
