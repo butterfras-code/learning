@@ -3,7 +3,7 @@
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 0;
-    background-image: url(./images/table.jpg);   
+    background-image: url(./images/table.png);   
     text-align: center;
     color: white;
     background-size: cover;
@@ -23,10 +23,27 @@ h1 {
 button {
     color: #016f32;
     width: 150px;
-    background: goldenrod;
     padding-top: 5px;
     padding-bottom: 5px;
     font-weight: bold;
     border: none;
     border-radius: 2px;
+    margin: 2px;
+}
+
+button:hover {
+    outline: 10px dotted hotpink;
+    cursor: pointer;
+}
+#start-btn {
+    background: goldenrod;
+    color: white;
+}
+#reset-btn {
+    background: darkred;
+    color: white;
+}
+#new-card-btn {
+    background: darkgreen;
+    color: white;
 }

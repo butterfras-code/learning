@@ -1,13 +1,12 @@
-
-
-let firstCard=randomCard()
-let secondCard=randomCard()
-let sum=firstCard+secondCard
 let numPlayers=1
 let cards=[]
 let hasBlackjack=false
 let isAlive=true
 let message=""
+let sum = 0
+let messageEl=document.getElementById("message-el")
+let sumEl=document.getElementById("sum-el")
+let cardsEl=document.getElementById("cards-el") 
 
 function dealCards() {
     for (let i=0;i<numPlayers;i++) {
@@ -35,14 +34,14 @@ function sumHand(player) {
 function startGame() {
     let player=0
     dealCards()
-    evaluateHand(player)
+    renderGame(player)
 }
 
-function evaluateHand(player) {
-    let sum = sumHand(player)
-    let messageEl=document.getElementById("message-el")
-    let sumEl=document.getElementById("sum-el")
-    let cardsEl=document.getElementById("cards-el") 
+function renderGame(player) {
+    sum = sumHand(player)
+    messageEl=document.getElementById("message-el")
+    sumEl=document.getElementById("sum-el")
+    cardsEl=document.getElementById("cards-el") 
     sumEl.textContent="Sum: "+sum
     cardsEl.textContent="Cards: "+cards[player].join(" ")
        // while (isAlive && !hasBlackjack) {
@@ -58,9 +57,19 @@ function evaluateHand(player) {
     messageEl.textContent=message
     // }
 }
-function addCard() {
+function newCard() {
     let player=0
     cards[player].push(randomCard())
-    evaluateHand(player)
+    renderGame(player)
 }
 
+function resetGame() {
+    cards=[]
+    hasBlackjack=false
+    isAlive=true
+    message=""
+    sum = 0
+    messageEl.textContent="Want to play a round?"
+    sumEl.textContent="Sum: "
+    cardsEl.textContent="Cards: "
+}
