@@ -1,3 +1,7 @@
+let userData = {
+    name: "Justin",
+    chips: 145
+}
 let numPlayers=1
 let cards=[]
 let hasBlackjack=false
@@ -7,6 +11,7 @@ let sum = 0
 let messageEl=document.getElementById("message-el")
 let sumEl=document.getElementById("sum-el")
 let cardsEl=document.getElementById("cards-el") 
+let userDataEl=document.getElementById("user-data-el")
 
 function dealCards() {
     for (let i=0;i<numPlayers;i++) {
@@ -45,10 +50,13 @@ function startGame() {
 function renderGame(player) {
     sum = sumHand(player)
     messageEl=document.getElementById("message-el")
-    sumEl=document.getElementById("sum-el")
     cardsEl=document.getElementById("cards-el") 
-    sumEl.textContent="Sum: "+sum
+    sumEl=document.getElementById("sum-el")
+    userDataEl=document.getElementById("user-data-el")
     cardsEl.textContent="Cards: "+cards[player].join(" ")
+    sumEl.textContent="Sum: "+sum
+    userDataEl.textContent="Player: "+userData.name+" $"+userData.chips
+
        // while (isAlive && !hasBlackjack) {
         if (sum <= 20) {
         message="Do you want to draw a new card?"
@@ -70,7 +78,9 @@ function renderGame(player) {
 }
 function newCard() {
     let player=0
-    cards[player].push(randomCard())
+    if (isAlive && !hasBlackjack) {
+        cards[player].push(randomCard())
+    } 
     renderGame(player)
 }
 
