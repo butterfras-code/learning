@@ -5,6 +5,7 @@
 body {
     margin: 0;
     background-color: #1B244A;
+    text-align: center;
 }
 
 .container {
@@ -61,5 +62,16 @@ body {
     gap: 10px;
     margin-top: 15px;
     margin-bottom: 15px;
-
+}
+.resetButton {
+    margin-top: 20px;
+    width: 120px;
+    border: solid 2px #9AABD8;
+    font-family: 'CursedTimer', Verdana, Geneva, Tahoma, sans-serif;
+    color: darkred;
+    font-size: 20px;
+    text-align: center;
+    background-color: #1B244A;
+    border-radius: 5px;
+    padding: 5px;
 }

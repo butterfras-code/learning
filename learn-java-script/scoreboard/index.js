@@ -9,3 +9,7 @@ function increaseScore(team, points) {
     Scores[team] += points
     updateScores()
 }
+function resetScores() {
+    Scores = [0, 0]
+    updateScores()
+}
