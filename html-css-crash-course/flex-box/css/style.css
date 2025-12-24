@@ -1,0 +1,51 @@
+header {
+    background: #588c94;
+    color:antiquewhite;
+    padding: 48px;
+}
+h1 {
+    text-align: center;
+    font-size: 48px;
+}
+h2
+{
+    font-size: 36px;
+    margin-bottom: 16px;
+}
+h3
+{
+    font-size: 28px;
+    margin-bottom: 12px;
+}
+footer {
+    background: #1d3c41;
+    color: antiquewhite;
+    text-align: center;
+    padding: 24px;
+}
+
+body{
+    font-size: 21px;
+    font-family: Arial, Helvetica, sans-serif;
+    color:grey;
+    margin: 0;
+}
+.middle {
+    max-width: 500px;
+    margin: auto;
+    padding: 40px;
+    text-align: center;
+}
+.columns {
+    color:antiquewhite;
+    display: flex;
+    width: 900px;
+    margin: auto;
+}
+.column {
+    padding: 5px;
+    border: dotted cyan 3px;
+    gap: 10px
+}
+/* main
+p */

@@ -1,0 +1,65 @@
+@font-face {
+    font-family: 'CursedTimer';
+    src: url('./fonts/CursedTimerUlil-Aznm.ttf') format('truetype'  );
+}
+body {
+    margin: 0;
+    background-color: #1B244A;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 575px;
+    /* height: 385px; */
+    border:#9AABD8 solid 5px;
+}
+.teamname {
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 36px;
+    margin-top: 60px;
+    margin-bottom: 10px;
+    width: 149px;
+    text-align: center;
+
+}
+.score {
+    background-color: black;
+    color: #F94F6D;
+    font-family: 'CursedTimer', Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 90px;
+    width: 155px;
+    height: 120px;
+    padding: 15px 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+.scoreButtons {
+    height: 45px;
+    width: 45px;
+    border: solid 2px #9AABD8;
+    font-family: 'CursedTimer', Verdana, Geneva, Tahoma, sans-serif;
+    color: #9AABD8;
+    font-size: 18px;
+    text-align: center;
+    background-color: #1B244A;
+    border-radius: 5px;
+}
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}

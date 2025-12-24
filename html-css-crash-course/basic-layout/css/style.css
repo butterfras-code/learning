@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: lightgray;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: darkred;
+    color: lightsteelblue;
+    alignment: center;
+    margin-bottom: 25 px;
+    padding: 25 px; 0 px;
+
+}
+footer {
+    background-color: navy;
+    color: lightsteelblue;
+    text-align: center;
+    margin-bottom: 25 px;
+    padding: 25px;   
+}
+main {
+    background-color: azure;
+    color: navy;
+    text-align: left;
+    padding: 25px; 
+    width: 601px;
+    border: 5px solid red;
+    margin: 0 auto;
+}

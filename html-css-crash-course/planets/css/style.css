@@ -1,0 +1,32 @@
+body {
+    background-color: #333;
+    color: #f4f4f4;
+}
+a {
+    color: orangered;
+
+}
+h1 {
+    text-decoration: none;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+    font-size: 60px;
+    color: teal
+}
+h2 {
+    text-decoration: underline;
+}
+p {
+    font-size: 10px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}   
+ .intro {
+    font-size:24px;
+    border: 2px dotted white;
+    width: 100px;
+ }
+ #earth-title {
+    color: rgba(0, 128, 0, 0.347);
+ }
+#mars-title {
+    color: lightcyan;
+}
