@@ -14,7 +14,7 @@ function dealCards() {
         cards.push([])
         cards[i]=[]
         cards[i].push(randomCard(),randomCard())
-        console.log("Player "+(i+1)+": "+cards[i])
+        
     }
 
 }
@@ -25,13 +25,28 @@ function randomCard() {
 }
 
 function showHand(player) {
-    console.log("Cards: "+firstCard+" "+secondCard)
-    console.log("Sum: "+sum)
+    console.log("Player "+(player+1)+": "+cards[player])
+}
+function sumHand(player) {
+    let sum = cards[player].reduce((a,b) => a + b, 0)
+    return sum
 }
 
-function checkHand(player) {
-    let sum = cards[player].reduce((a,b) => a + b, 0)
-    if (sum <= 20) {
+function startGame() {
+    let player=0
+    dealCards()
+    evaluateHand(player)
+}
+
+function evaluateHand(player) {
+    let sum = sumHand(player)
+    let messageEl=document.getElementById("message-el")
+    let sumEl=document.getElementById("sum-el")
+    let cardsEl=document.getElementById("cards-el") 
+    sumEl.textContent="Sum: "+sum
+    cardsEl.textContent="Cards: "+cards[player].join(" ")
+       // while (isAlive && !hasBlackjack) {
+        if (sum <= 20) {
         message="Do you want to draw a new card?"
     } else if (sum === 21) {
         hasBlackjack=true
@@ -40,6 +55,12 @@ function checkHand(player) {
         isAlive=false
         message="You're out of the game!"
     }
-    console.log(message)
+    messageEl.textContent=message
+    // }
+}
+function addCard() {
+    let player=0
+    cards[player].push(randomCard())
+    evaluateHand(player)
 }
 
