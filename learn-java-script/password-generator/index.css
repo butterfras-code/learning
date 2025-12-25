@@ -1,0 +1,51 @@
+body {
+    margin: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #1f2937;
+    padding-left: 52px;
+}
+#CTA1, #CTA2{
+font-size: 40px;
+    
+}
+
+#CTA1 {
+color: white;
+}
+#CTA2 {
+color: #10b981
+}
+#subtitle {
+    color: #D5D4D8;
+    font-size: 28px;
+}
+#password-container {
+    /* display: flex */
+    gap: 10px;
+    margin-top: 10px;
+    justify-content:center;
+}
+button {
+    border: none;
+    width: 211px;
+    height: 39px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#generate-btn {
+    
+    margin-top: 10px;
+    background-color: #10b981;
+    
+    color: white;
+
+}
+.passwordButton {
+    color: #55F991;
+    background-color: #273549;
+}
+#gen-container {
+    height: 120px;
+    max-width: 550px;
+}
