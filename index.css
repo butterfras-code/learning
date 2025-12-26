@@ -21,14 +21,13 @@ h1, h2 {
     justify-content: space-around;
 }
 #projectsDiv {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     padding: 10px;
-    width:80%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
     border-radius: 5px;
-    background-color: var(--card-color);
+    /* background-color: var(--card-color); */
     color: var(--text-color);
 }
 .project {
