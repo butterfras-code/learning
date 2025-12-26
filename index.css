@@ -37,18 +37,48 @@ h1, h2 {
     max-width: 250px;
     height: 180px;
     text-align: center;
-    
     border-radius: 10px;
     background-color: var(--accent-color);
     color: var(--text-color);
     
+    
+}
+.project-btn {
+    color: var(--text-color);
+    background-color: var(--accent-color);
+    display: inline-block;
+    margin-top: auto;
+    padding: 8px 12px;
+    background: var(--secondary-color);
+    color: var(--bg-color);
+    border-radius: 6px;
+    font-weight: 600;
+    align-self: center;
+     margin-top: auto; /* pushes this div to the bottom */
+    align-self: center;
+
 }
 .project a {
     color: var(--text-color);
     background-color: var(--accent-color);
+    background: var(--secondary-color);
+    color: var(--bg-color);
+    text-decoration: none;
 
 }
 .project-title {
     border-radius: 10px 10px 0 0;
     background-color: var(--secondary-color);
+    height: 40px;
+    font-size:large
+    
+}
+.project-description {
+    padding: 2px;
+    font-size: small;
+    display: flex;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; /* take remaining space so button can be pushed down */
+
 }

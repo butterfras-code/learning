@@ -9,15 +9,18 @@ function displayProjects() {
         projectElement.innerHTML = `
             <div class="project">
                 <div class="project-title">
-                    <h3>${project.title}</h3></div>
+                    <h3>${project.title}</h3>
+                </div>
+                <div class="project-description">
                     <p>${project.description}</p>
-                    <a href="${project.relativeLink}">View Project</a>
+                    <div class="project-btn"><a href="${project.relativeLink}">View Project</a></div>
                 </div>
             </div>
         `;
         projectsDiv.appendChild(projectElement);
     });
 }
+
 async function loadProjects() {
     try {
         const res = await fetch('./projects.json'); // or './projects.json' if you rename
