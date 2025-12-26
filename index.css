@@ -1,7 +1,21 @@
+:root {
+    --bg-color: #1E1B18;
+    --text-color: #F9F7F2;
+    --accent-color: #2D7082;
+    --secondary-color: #E6A828;
+    --card-color: #4F5D65;
+}
 body {
     margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: verdana, sans-serif;
 }
-
+h1, h2 {
+    font-family: 'Nova Cut', cursive;
+    text-align: center;
+    color: var(--secondary-color);
+}
 .container {
     display: flex;
     justify-content: space-around;
@@ -9,17 +23,32 @@ body {
 #projectsDiv {
     border: 2px solid black;
     padding: 10px;
-    width: 90%;
+    width:80%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
+    border-radius: 5px;
+    background-color: var(--card-color);
+    color: var(--text-color);
 }
 .project {
-    border: 1px solid gray;
-    margin: 5px;
-    padding: 5px;
-    max-width: 180px;
+    border: 1px solid --accent-color;
+    margin: 10px;
+    max-width: 250px;
     height: 180px;
     text-align: center;
-    margin: 10px;
+    
+    border-radius: 10px;
+    background-color: var(--accent-color);
+    color: var(--text-color);
+    
+}
+.project a {
+    color: var(--text-color);
+    background-color: var(--accent-color);
+
+}
+.project-title {
+    border-radius: 10px 10px 0 0;
+    background-color: var(--secondary-color);
 }

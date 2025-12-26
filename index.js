@@ -8,9 +8,11 @@ function displayProjects() {
         const projectElement = document.createElement("div");
         projectElement.innerHTML = `
             <div class="project">
-                <h3>${project.title}</h3>
-                <p>${project.description}</p>
-                <a href="${project.relativeLink}">View Project</a>
+                <div class="project-title">
+                    <h3>${project.title}</h3></div>
+                    <p>${project.description}</p>
+                    <a href="${project.relativeLink}">View Project</a>
+                </div>
             </div>
         `;
         projectsDiv.appendChild(projectElement);
