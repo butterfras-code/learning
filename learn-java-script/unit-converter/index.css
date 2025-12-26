@@ -1,0 +1,82 @@
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    width:550px;
+    height: 729px;
+    background-color: black;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around;
+}
+#top-section {
+    width:550px;
+    height: 285px;
+    background-color: #6943FF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    papdding-top: 33px;
+    color: #ffffff;
+    border-radius: 20px 20px 0px 0px;
+}
+#bottom-section {
+    font-size: 18px;
+    width:550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1F2937;
+    border-radius: 0px 0px 20px 20px;
+}
+.conversion-block {
+    margin: 10px;
+    padding-top: 31px;
+    text-align: center;
+    width: 500px;
+    height: 108px;
+    background-color: #273549;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 400;;
+}
+h1 {
+    font-size: 24px;
+    text-align: center;
+}
+h2 {
+    font-size: 20px;
+    font-weight: semi-bold;
+    color: #ccc1ff;
+}
+#input-field {
+    width: 117px;
+    height: 83px;
+    font-size: 58px;
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    outline: solid 2px #B295FF;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    margin-top: 30px;
+
+}
+button {
+    
+    border-radius: 5px;
+    outline: none;
+    border: none;
+}
+#convert-button {
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#clear-button {
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+}
