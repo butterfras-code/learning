@@ -33,5 +33,10 @@
     "title": "Unit Converter",
     "description": "Converts between metric and imperial units (length, volume, mass).",
     "relativeLink": "learn-java-script/unit-converter/index.html"
+  },
+  {
+    "title": "QJay",
+    "description": "full featured production app for DJs and Dancers to make requests and manage dance queues. Developed with AI tools, not hand coded.",
+    "relativeLink": "https://qjay.app"
   }
 ]
