@@ -4,6 +4,10 @@
     --accent-color: #2D7082;
     --secondary-color: #E6A828;
     --card-color: #4F5D65;
+    --lavender: #BFA3FF;
+    --sky: #7FD6FF;
+    --mint: #9AFFDA;
+    --accent-gradient: linear-gradient(45deg, var(--lavender), var(--sky), var(--sky), var(--sky), var(--mint));
 }
 body {
     margin: 0;
@@ -15,6 +19,7 @@ h1, h2 {
     font-family: 'Nova Cut', cursive;
     text-align: center;
     color: var(--secondary-color);
+    
 }
 .container {
     display: flex;
@@ -33,7 +38,7 @@ h1, h2 {
 .project {
     border: 1px solid --accent-color;
     margin: 10px;
-    max-width: 250px;
+    width: 250px;
     height: 180px;
     text-align: center;
     border-radius: 10px;
@@ -67,9 +72,10 @@ h1, h2 {
 }
 .project-title {
     border-radius: 10px 10px 0 0;
-    background-color: var(--secondary-color);
+    background: var(--accent-gradient);
     height: 40px;
     font-size:large
+
     
 }
 .project-description {
