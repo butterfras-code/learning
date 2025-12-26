@@ -9,15 +9,17 @@ body {
 #projectsDiv {
     border: 2px solid black;
     padding: 10px;
-    /* width: 300px;
-    height: 200px; */
-    /* display: flex; */
+    width: 90%;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
 }
 .project {
     border: 1px solid gray;
     margin: 5px;
     padding: 5px;
-    /* width: 80px; */
-    /* height: 80px; */
+    max-width: 180px;
+    height: 180px;
     text-align: center;
+    margin: 10px;
 }

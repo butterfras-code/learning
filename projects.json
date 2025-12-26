@@ -1,15 +1,5 @@
 [
-  {
-    "title": "A",
-    "description": "Placeholder project folder.",
-    "relativeLink": "learn-java-script/a/index.html"
-  },
-  {
-    "title": "A copy",
-    "description": "Empty or placeholder folder.",
-    "relativeLink": "learn-java-script/a copy/"
-  },
-  {
+    {
     "title": "Blackjack",
     "description": "A simple Blackjack game built with JavaScript.",
     "relativeLink": "learn-java-script/blackjack/index.html"
