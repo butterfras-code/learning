@@ -1,0 +1,47 @@
+[
+  {
+    "title": "A",
+    "description": "Placeholder project folder.",
+    "relativeLink": "learn-java-script/a/index.html"
+  },
+  {
+    "title": "A copy",
+    "description": "Empty or placeholder folder.",
+    "relativeLink": "learn-java-script/a copy/"
+  },
+  {
+    "title": "Blackjack",
+    "description": "A simple Blackjack game built with JavaScript.",
+    "relativeLink": "learn-java-script/blackjack/index.html"
+  },
+  {
+    "title": "Calculator",
+    "description": "Basic calculator with add/subtract/divide/multiply functionality.",
+    "relativeLink": "learn-java-script/calculator/index.html"
+  },
+  {
+    "title": "Counter",
+    "description": "Counts people entered and can save the count.",
+    "relativeLink": "learn-java-script/counter/index.html"
+  },
+  {
+    "title": "Extension",
+    "description": "Browser extension example (Scrimba course).",
+    "relativeLink": "learn-java-script/Extension/index.html"
+  },
+  {
+    "title": "Password Generator",
+    "description": "Generates random passwords.",
+    "relativeLink": "learn-java-script/password-generator/index.html"
+  },
+  {
+    "title": "Scoreboard",
+    "description": "Tracks home and guest scores with reset functionality.",
+    "relativeLink": "learn-java-script/scoreboard/index.html"
+  },
+  {
+    "title": "Unit Converter",
+    "description": "Converts between metric and imperial units (length, volume, mass).",
+    "relativeLink": "learn-java-script/unit-converter/index.html"
+  }
+]
