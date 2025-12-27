@@ -58,7 +58,6 @@ h1, h2 {
     border-radius: 6px;
     font-weight: 600;
     align-self: center;
-     margin-top: auto; /* pushes this div to the bottom */
     align-self: center;
 
 }
@@ -84,6 +83,6 @@ h1, h2 {
     display: flex;
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto; /* take remaining space so button can be pushed down */
+    flex: 1 1 auto;
 
 }
