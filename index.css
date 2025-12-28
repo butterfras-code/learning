@@ -9,6 +9,10 @@
     --mint: #9AFFDA;
     --accent-gradient: linear-gradient(45deg, var(--lavender), var(--sky), var(--sky), var(--sky), var(--mint));
 }
+@font-face {
+    font-family: Electrone;
+    src: url(Electrone-Regular.ttf);
+}
 body {
     margin: 0;
     background-color: var(--bg-color);
@@ -16,22 +20,19 @@ body {
     font-family: verdana, sans-serif;
 }
 h1, h2 {
-    font-family: 'Nova Cut', cursive;
+    font-family: Electrone, sans-serif;
     text-align: center;
     color: var(--secondary-color);
     
 }
-.container {
-    display: flex;
-    justify-content: space-around;
-}
+
 #projectsDiv {
-    /* border: 2px solid black; */
+        width: 100%;
     padding: 10px;
-    margin: auto;
     display: flex;
     flex-wrap: wrap;
     border-radius: 5px;
+    justify-content: center;;
     /* background-color: var(--card-color); */
     color: var(--text-color);
 }
