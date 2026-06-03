@@ -1,5 +1,10 @@
 [
-    {
+   {
+    "title": "TypoForge",
+    "description": "A simple typing practice tool.",
+    "relativeLink": "other/typing-practice.html"
+  }, 
+  {
     "title": "Blackjack",
     "description": "A simple Blackjack game built with JavaScript.",
     "relativeLink": "learn-java-script/blackjack/index.html"
