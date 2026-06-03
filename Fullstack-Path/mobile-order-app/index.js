@@ -49,12 +49,12 @@ function renderMenu() {
                 <h2>${item.emoji}</h2>
             </div>
             <div class="menu-item-details">
-                <h2>${item.name}</h2>
-                <p>Ingredients: ${item.ingredients.join(", ")}</p>
-                <p>Price: $${item.price}</p>
+                <h2 class="menu-item-name">${item.name}</h2>
+                <p class="menu-item-ingredients">Ingredients: ${item.ingredients.join(", ")}</p>
+                <p class="menu-item-price">Price: $${item.price}</p>
             </div>
             <div class="menu-item-add">
-                <button class="add-button" data-item-id="${item.id}">+</button>
+                <button class="menu-item-add-button" data-item-id="${item.id}">+</button>
             </div>
         </li>
         `;
@@ -89,8 +89,9 @@ function renderOrder() {
     cart.forEach(function(item) {
         orderHTML += `
         <li class="order-item">
-            <div class="order-item-name">${item.name}</div>
+            <div class="order-item-name">${item.name}
             <button class="remove-button" data-remove-id="${item.id}">Remove</button>
+            </div>
             <div class="order-item-price">$${item.price}</div>
         </li>
         `;

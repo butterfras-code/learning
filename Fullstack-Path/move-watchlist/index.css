@@ -1,0 +1,73 @@
+body {
+    margin: 0;
+    width: 550px;
+    background: #121212;
+    color: #2E2E2F;
+    font-family: 'Inter', sans-serif;
+
+    
+}
+
+.results-container {
+    height: calc(779px - 208px);
+    align-items: center;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    background-image: url("./images/header.png");
+    background-size: 550px;
+    height: 208px;
+}
+h1 {
+    margin: auto;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-style: extra-bold;
+    font-weight: 800;
+    font-size: 43px;
+}
+#watchlist-button {
+    background: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-style: Bold;
+    font-size: 14px;
+    leading-trim: NONE;
+    line-height: 20px;
+    letter-spacing: 0%;
+    text-align: right;
+    color: #FFFFFF;
+    outline: none;
+    border: none;
+}
+
+#search-input {
+/* width: 342px; */
+height: 38px;
+border-radius: 6px 0 0 6px;
+angle: 0 deg;
+box-sizing: border-box;
+background: #2E2E2F;
+bo1x-shadow: 0px 1px 2px 0px #0000000D;
+flex: 1;
+width: auto;
+
+}
+#search-section {
+margin: -19px 46px 0 46px;
+gap: 0;
+display: flex;
+align-items: center;
+}
+#search-button {
+    width: 120px;
+    height: 38px;
+    border-radius: 0 6px 6px 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}

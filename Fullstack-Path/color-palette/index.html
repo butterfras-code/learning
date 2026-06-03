@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Color Palette</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div id="container" class="container">
+            <form id="color-form" class="color-form">  
+                <input type="color" id="chosen-color"></input>
+                <select id="chosen-mode">
+                    <option value="monochrome">Monochrome</option>
+                    <option value="monochrome-dark">Monochrome Dark</option>
+                    <option value="monochrome-light">Monochrome Light</option>
+                    <option value="analogic">Analogic</option>
+                    <option value="complement">Complement</option>
+                    <option value="analogic-complement">Analogic Complement</option>
+                    <option value="triad">Triad</option>
+                    <option value="quad">Quad</option>
+                </select>
+                <button type="submit" id="submit-btn">Get Colors</button>
+                <div id="chosen-color-info"></div>
+            </form>
+            <section id="swatches-container">SWATCHES</section>
+            <section id="label-container">LABELS</section>
+        </div>
+        <script src="index.js"></script>
+    </body>
+</html>

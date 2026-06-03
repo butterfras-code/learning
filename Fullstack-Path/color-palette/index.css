@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    background-color: #1F2937;
+}
+
+form {
+    display: flex;
+  
+    top: 0px;
+    
+
+}
+.container {
+    height: 550px;
+    width: 550px;
+}
+
+
+#swatches-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* height: 110px; */
+    width: 550px;
+}
+
+#label-container {
+    display: flex;
+    flex-wrap: wrap;
+    color : whitesmoke
+}
+
+.color-swatch {
+    width: 100px;
+    height: 550px;
+}
+
+.color-label {
+    width: 100px;
+    height: 50px;
+    text-align: center;
+    margin-top: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+#chosen-color-info {
+    margin-left: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+}
