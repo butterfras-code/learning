@@ -20,7 +20,7 @@ function displayProjects() {
         projectsDiv.appendChild(projectElement);
     });
 }
-
+//test
 async function loadProjects() {
     try {
         const res = await fetch('./projects.json'); // or './projects.json' if you rename
