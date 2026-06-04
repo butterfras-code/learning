@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypoForge</title>
-    //test
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&family=Patrick+Hand&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&family=Patrick+Hand&family=Share+Tech+Mono&display=swap');
+
         body { margin: 0; padding: 0; overflow-x: hidden; }
-        
+
+        .font-terminal { font-family: 'Share Tech Mono', monospace; }
         .font-space { font-family: 'Space Mono', monospace; }
         .font-typewriter { font-family: 'Special Elite', cursive; }
         .font-handwritten { font-family: 'Patrick Hand', cursive; font-size: 1.25em; line-height: 1.4; }
@@ -32,14 +32,51 @@
             100% { background-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
         }
         .cursor-rainbow { animation: rainbowBg 0.5s linear infinite; opacity: 0.7; }
-        
-        @keyframes box-explode {
-            0% { transform: scale(1); opacity: 0.8; border-width: 2px; }
-            100% { transform: scale(2.5) rotate(10deg); opacity: 0; border-width: 0px; }
+
+        @keyframes neonFlicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 3px #fff, 0 0 8px #fff, 0 0 15px #FF10F0, 0 0 35px #FF10F0, 0 0 65px #FF10F0, 0 0 100px #FF10F0;
+            }
+            20%, 24%, 55% { opacity: 0.12; box-shadow: none; }
         }
-        .animate-box-explode {
-            animation: box-explode 0.35s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        .cursor-neon-bar {
+            background: linear-gradient(to bottom, #FF10F0, #ffffff 45%, #FF10F0);
+            animation: neonFlicker 2s step-end infinite;
         }
+
+        @keyframes box-breathe {
+            0%, 100% { transform: scale(1);    opacity: 0.5; }
+            50%       { transform: scale(1.45); opacity: 0.95; }
+        }
+        .animate-box-breathe {
+            animation: box-breathe 1.1s ease-in-out infinite;
+        }
+
+        @keyframes box-spin-exit-1 {
+            0%   { transform: scale(1) rotate(0deg);    opacity: 0.9; border-width: 2px; }
+            15%  { transform: scale(1.4) rotate(.6deg); opacity: 1;   border-width: 2px; }
+            100% { transform: scale(4) rotate(7.2deg);  opacity: 0;   border-width: 0px; }
+        }
+        @keyframes box-spin-exit-2 {
+            0%   { transform: scale(1) rotate(0deg);     opacity: 0.9; border-width: 2px; }
+            15%  { transform: scale(1.4) rotate(-.4deg); opacity: 1;   border-width: 2px; }
+            100% { transform: scale(3.5) rotate(-5.4deg); opacity: 0;  border-width: 0px; }
+        }
+        @keyframes box-spin-exit-3 {
+            0%   { transform: scale(1) rotate(0deg);    opacity: 0.9; border-width: 2px; }
+            20%  { transform: scale(1.5) rotate(.9deg); opacity: 1;   border-width: 2px; }
+            100% { transform: scale(4.5) rotate(10.8deg); opacity: 0; border-width: 0px; }
+        }
+        @keyframes box-spin-exit-4 {
+            0%   { transform: scale(1) rotate(0deg);     opacity: 0.9; border-width: 2px; }
+            15%  { transform: scale(1.3) rotate(-.6deg); opacity: 1;   border-width: 2px; }
+            100% { transform: scale(3) rotate(-7.2deg);  opacity: 0;   border-width: 0px; }
+        }
+        .animate-box-spin-1 { animation: box-spin-exit-1 0.45s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+        .animate-box-spin-2 { animation: box-spin-exit-2 0.38s cubic-bezier(0.2, 0.7, 0.4, 1) forwards; }
+        .animate-box-spin-3 { animation: box-spin-exit-3 0.5s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; }
+        .animate-box-spin-4 { animation: box-spin-exit-4 0.4s cubic-bezier(0.15, 0.85, 0.35, 1) forwards; }
 
         @keyframes rainbow-particle-explosion {
             0% {
@@ -92,7 +129,7 @@
         };
 
         const FONTS = {
-            mono: 'font-mono',
+            terminal: 'font-terminal',
             sans: 'font-sans',
             serif: 'font-serif',
             space: 'font-space',
@@ -103,17 +140,265 @@
         const CURSORS = {
             line: 'border-l-[3px] border-current animate-pulse',
             underline: 'border-b-[3px] border-current animate-pulse',
-            'neon-pulse': 'border-l-[4px] shadow-[0_0_10px_currentColor,0_0_20px_currentColor] animate-pulse',
+            'neon-pulse': 'cursor-neon-bar',
             'rainbow-vomit': 'cursor-rainbow shadow-lg',
             'pulsing-box': 'cursor-pulsing-box',
             'exploding-rainbow-vomit': 'cursor-rainbow shadow-lg' 
         };
 
         const CHUNK_SIZE = 1500;
-        const BRUTALIST_ERROR_RED = '#FF003C'; 
+        const BRUTALIST_ERROR_RED = '#FF003C';
+        const BOX_SPIN_CLASSES = ['animate-box-spin-1', 'animate-box-spin-2', 'animate-box-spin-3', 'animate-box-spin-4'];
+
+        const GITHUB_REPOS = [
+            {
+                id: 'monkeytype',
+                label: 'MonkeyType',
+                owner: 'monkeytypegame',
+                repo: 'monkeytype',
+                branch: null,
+                fileFilter: path => path.endsWith('.json'),
+                parse: text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (Array.isArray(data.words)) return data.words.join(' ');
+                        if (Array.isArray(data.quotes)) return data.quotes.map(q => q.text).join('\n\n');
+                        if (Array.isArray(data)) return data.join('\n');
+                    } catch {}
+                    return text;
+                }
+            },
+        ];
 
         const normalizeText = (text) => text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-        const DEFAULT_TEXT = normalizeText("Drag and drop a .txt file here, or paste some text/code to get started.\n\nfunction greet(name) {\n  console.log(`Hello, ${name}!`);\n}\n\nOnce you drop a file or paste text, you can start typing immediately.");
+        const DEFAULT_TEXT = normalizeText("Drop/paste some text/code or use the wikipedia options above to get started.\n\nconst name=\"WORLD\";\n\nfunction greet(name) {\n  console.log(`Hello ${name}!`);\n}\n\nOnce you drop a file or paste text, you can start typing immediately.");
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const hexToRgb = (hex) => {
+            const normalized = hex.replace('#', '');
+            const value = normalized.length === 3
+                ? normalized.split('').map((char) => char + char).join('')
+                : normalized;
+
+            return {
+                r: parseInt(value.slice(0, 2), 16),
+                g: parseInt(value.slice(2, 4), 16),
+                b: parseInt(value.slice(4, 6), 16),
+            };
+        };
+        const mixColors = (colorA, colorB, weight = 0.5) => {
+            const a = hexToRgb(colorA);
+            const b = hexToRgb(colorB);
+            const ratio = clamp(weight, 0, 1);
+            const toHex = (channel) => channel.toString(16).padStart(2, '0');
+
+            return `#${toHex(Math.round(a.r + (b.r - a.r) * ratio))}${toHex(Math.round(a.g + (b.g - a.g) * ratio))}${toHex(Math.round(a.b + (b.b - a.b) * ratio))}`;
+        };
+        const getRelativeLuminance = (hex) => {
+            const { r, g, b } = hexToRgb(hex);
+            const toLinear = (channel) => {
+                const value = channel / 255;
+                return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+            };
+
+            return (0.2126 * toLinear(r)) + (0.7152 * toLinear(g)) + (0.0722 * toLinear(b));
+        };
+
+        function LibraryModal({ onClose, onImport, currentPanel, currentInk, currentSurface }) {
+            const [selectedRepo, setSelectedRepo] = useState(GITHUB_REPOS[0]);
+            const [allFiles, setAllFiles] = useState([]);
+            const [treeLoading, setTreeLoading] = useState(false);
+            const [treeError, setTreeError] = useState('');
+            const [truncated, setTruncated] = useState(false);
+            const [filter, setFilter] = useState('');
+            const [selectedFile, setSelectedFile] = useState(null);
+            const [previewText, setPreviewText] = useState('');
+            const [parsedContent, setParsedContent] = useState('');
+            const [fileLoading, setFileLoading] = useState(false);
+            const [fileError, setFileError] = useState('');
+            const [resolvedBranch, setResolvedBranch] = useState('');
+
+            useEffect(() => {
+                loadTree(selectedRepo);
+            }, [selectedRepo.id]);
+
+            const loadTree = async (repo) => {
+                setAllFiles([]);
+                setTruncated(false);
+                setTreeLoading(true);
+                setTreeError('');
+                setSelectedFile(null);
+                setPreviewText('');
+                setParsedContent('');
+                try {
+                    let branch = repo.branch;
+                    if (!branch) {
+                        const metaRes = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}`);
+                        if (!metaRes.ok) throw new Error(`GitHub API error ${metaRes.status}`);
+                        const meta = await metaRes.json();
+                        branch = meta.default_branch;
+                    }
+                    setResolvedBranch(branch);
+                    const res = await fetch(
+                        `https://api.github.com/repos/${repo.owner}/${repo.repo}/git/trees/${branch}?recursive=1`
+                    );
+                    if (!res.ok) {
+                        throw new Error(
+                            res.status === 403 || res.status === 429
+                                ? 'GitHub rate limit reached. Wait ~1 minute and try again.'
+                                : `GitHub API error ${res.status}`
+                        );
+                    }
+                    const data = await res.json();
+                    const files = data.tree.filter(item => item.type === 'blob' && repo.fileFilter(item.path));
+                    setAllFiles(files);
+                    setTruncated(!!data.truncated);
+                } catch (e) {
+                    setTreeError(e.message);
+                } finally {
+                    setTreeLoading(false);
+                }
+            };
+
+            const selectFile = async (file) => {
+                setSelectedFile(file);
+                setPreviewText('');
+                setParsedContent('');
+                setFileLoading(true);
+                setFileError('');
+                try {
+                    const { owner, repo, parse } = selectedRepo;
+                    const url = `https://raw.githubusercontent.com/${owner}/${repo}/${resolvedBranch}/${file.path}`;
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error(`Failed to load file (${res.status})`);
+                    const text = await res.text();
+                    const parsed = parse(text);
+                    setParsedContent(parsed);
+                    setPreviewText(parsed.slice(0, 400));
+                } catch (e) {
+                    setFileError(e.message);
+                } finally {
+                    setFileLoading(false);
+                }
+            };
+
+            const handleImport = () => {
+                if (parsedContent) { onImport(parsedContent); onClose(); }
+            };
+
+            const filtered = useMemo(() => {
+                if (!filter) return allFiles;
+                const q = filter.toLowerCase();
+                return allFiles.filter(f => f.path.toLowerCase().includes(q));
+            }, [allFiles, filter]);
+
+            const fileName = path => path.split('/').pop();
+
+            return (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
+                    onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+                >
+                    <div
+                        className="w-[720px] max-w-[96vw] flex flex-col border-4 border-current"
+                        style={{ backgroundColor: currentPanel, color: currentInk, maxHeight: '85vh' }}
+                    >
+                        {/* Modal header */}
+                        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-current shrink-0">
+                            <div className="flex items-center gap-4">
+                                <span className="text-xl font-bold uppercase tracking-widest">Library</span>
+                                <div className="flex gap-2">
+                                    {GITHUB_REPOS.map(repo => (
+                                        <button
+                                            key={repo.id}
+                                            onMouseDown={e => e.preventDefault()}
+                                            onClick={() => setSelectedRepo(repo)}
+                                            className="px-3 py-1 border-2 border-current font-bold uppercase text-sm"
+                                            style={selectedRepo.id === repo.id ? { backgroundColor: currentInk, color: currentPanel } : {}}
+                                        >
+                                            {repo.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <button
+                                onMouseDown={e => e.preventDefault()}
+                                onClick={onClose}
+                                className="px-3 py-1 border-2 border-current font-bold uppercase invert-on-hover"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Body */}
+                        <div className="flex flex-1 min-h-0" style={{ minHeight: 0 }}>
+                            {/* File list */}
+                            <div className="flex flex-col border-r-2 border-current min-h-0" style={{ width: '55%' }}>
+                                <div className="px-3 py-2 border-b border-current shrink-0">
+                                    <input
+                                        autoFocus
+                                        type="text"
+                                        placeholder="Filter files..."
+                                        value={filter}
+                                        onChange={e => setFilter(e.target.value)}
+                                        className="w-full border-2 border-current px-3 py-1 outline-none font-bold text-sm"
+                                        style={{ backgroundColor: currentSurface, color: currentInk }}
+                                    />
+                                </div>
+                                <div className="overflow-y-auto flex-1">
+                                    {treeLoading && <div className="p-4 font-bold uppercase opacity-50 text-sm">Fetching tree…</div>}
+                                    {treeError && <div className="p-4 font-bold text-sm" style={{ color: BRUTALIST_ERROR_RED }}>{treeError}</div>}
+                                    {!treeLoading && !treeError && filtered.length === 0 && (
+                                        <div className="p-4 font-bold uppercase opacity-40 text-sm">
+                                            {allFiles.length === 0 ? 'No files found' : 'No matches'}
+                                        </div>
+                                    )}
+                                    {filtered.map(file => (
+                                        <button
+                                            key={file.path}
+                                            onClick={() => selectFile(file)}
+                                            className="w-full text-left px-4 py-2 border-b border-current transition-all"
+                                            style={selectedFile?.path === file.path ? { backgroundColor: currentInk, color: currentPanel } : {}}
+                                        >
+                                            <div className="font-bold text-sm truncate">{fileName(file.path)}</div>
+                                            <div className="text-xs opacity-50 truncate">{file.path.split('/').slice(0, -1).join('/')}</div>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="px-4 py-2 border-t border-current text-xs font-bold uppercase opacity-50 shrink-0">
+                                    {filtered.length} / {allFiles.length} files{truncated ? ' · GitHub truncated tree' : ''}
+                                </div>
+                            </div>
+
+                            {/* Preview + import */}
+                            <div className="flex flex-col min-h-0" style={{ width: '45%' }}>
+                                <div className="flex-1 overflow-y-auto p-4 font-mono text-sm leading-relaxed">
+                                    {!selectedFile && !fileLoading && <div className="opacity-40 uppercase font-bold text-xs">Select a file to preview</div>}
+                                    {fileLoading && <div className="opacity-50 uppercase font-bold text-xs">Loading…</div>}
+                                    {fileError && <div className="font-bold text-xs" style={{ color: BRUTALIST_ERROR_RED }}>{fileError}</div>}
+                                    {previewText && (
+                                        <div>
+                                            <div className="font-bold uppercase text-xs opacity-50 mb-3">{fileName(selectedFile.path)}</div>
+                                            <div className="opacity-80 whitespace-pre-wrap break-words">{previewText}…</div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="p-4 border-t-2 border-current shrink-0">
+                                    <button
+                                        onMouseDown={e => e.preventDefault()}
+                                        onClick={handleImport}
+                                        disabled={!parsedContent}
+                                        className="w-full px-4 py-3 border-2 border-current font-bold uppercase invert-on-hover disabled:opacity-30 disabled:cursor-not-allowed"
+                                    >
+                                        Import
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
 
         function App() {
             const [sourceText, setSourceText] = useState(DEFAULT_TEXT);
@@ -138,7 +423,14 @@
             const [fontSize, setFontSize] = useState(24);
             const [letterSpacing, setLetterSpacing] = useState(0);
 
+            const [wikiUrl, setWikiUrl] = useState('');
+            const [isLoadingWiki, setIsLoadingWiki] = useState(false);
+            const [wikiError, setWikiError] = useState('');
+            const [wikiArticleTitle, setWikiArticleTitle] = useState('');
+            const [showLibrary, setShowLibrary] = useState(false);
+
             const typingAreaRef = useRef(null);
+            const boxSpinClassRef = useRef(BOX_SPIN_CLASSES[0]);
 
             // Active Theme Derivation
             const activeTheme = BRUTALIST_THEMES[theme] || BRUTALIST_THEMES['Gold'];
@@ -156,26 +448,45 @@
 
             const currentText = textChunks[currentChunkIndex] || '';
 
-            const syntaxClasses = useMemo(() => {
+            const syntaxTheme = useMemo(() => {
+                const isDarkPanel = getRelativeLuminance(currentPanel) < 0.24;
+
+                return isDarkPanel ? {
+                    base: { color: mixColors(currentInk, '#FFFFFF', 0.08), opacity: 1 },
+                    keyword: { color: '#FFD166', fontWeight: '700', opacity: 1 },
+                    number: { color: '#7FDBCA', fontWeight: '700', opacity: 1 },
+                    function: { color: '#8EC5FF', fontStyle: 'italic', opacity: 1 },
+                    string: { color: '#FFB86C', opacity: 0.96 },
+                    comment: { color: '#A7B0BE', fontStyle: 'italic', opacity: 0.78 },
+                } : {
+                    base: { color: mixColors(currentInk, '#000000', 0.08), opacity: 1 },
+                    keyword: { color: '#7A1FA2', fontWeight: '700', opacity: 1 },
+                    number: { color: '#005F73', fontWeight: '700', opacity: 1 },
+                    function: { color: '#0B6E4F', fontStyle: 'italic', opacity: 1 },
+                    string: { color: '#B54708', opacity: 0.98 },
+                    comment: { color: '#6B7280', fontStyle: 'italic', opacity: 0.72 },
+                };
+            }, [currentInk, currentPanel]);
+
+            const syntaxTokens = useMemo(() => {
                 const classes = new Array(currentText.length).fill(null);
                 if (!isCodeMode) return classes;
 
-                const apply = (regex, styling) => {
+                const apply = (regex, tokenType) => {
                     let match;
                     while ((match = regex.exec(currentText)) !== null) {
                         if (match[0].length === 0) break;
                         for (let i = 0; i < match[0].length; i++) {
-                            classes[match.index + i] = styling;
+                            classes[match.index + i] = tokenType;
                         }
                     }
                 };
 
-                // Apply opacity, weight, and style instead of hardcoded colors
-                apply(/\b(const|let|var|function|return|if|else|for|while|import|from|export|default|class|switch|case|break)\b/g, 'font-bold opacity-100');
-                apply(/\b\d+\b/g, 'font-bold opacity-70');
-                apply(/\b([a-zA-Z_$][0-9a-zA-Z_$]*)\s*(?=\()/g, 'italic opacity-100');
-                apply(/(["'`])(?:(?=(\\?))\2|[\s\S])*?\1/g, 'opacity-70'); 
-                apply(/\/\/.*|\/\*[\s\S]*?\*\//g, 'italic opacity-40');
+                apply(/\b(const|let|var|function|return|if|else|for|while|import|from|export|default|class|switch|case|break|try|catch|finally|throw|new|extends|async|await)\b/g, 'keyword');
+                apply(/\b\d+(\.\d+)?\b/g, 'number');
+                apply(/\b([a-zA-Z_$][0-9a-zA-Z_$]*)\s*(?=\()/g, 'function');
+                apply(/(["'`])(?:(?=(\\?))\2|[\s\S])*?\1/g, 'string'); 
+                apply(/\/\/.*|\/\*[\s\S]*?\*\//g, 'comment');
 
                 return classes;
             }, [currentText, isCodeMode]);
@@ -287,6 +598,7 @@
             };
 
             const processKeystroke = (chars) => {
+                boxSpinClassRef.current = BOX_SPIN_CLASSES[Math.floor(Math.random() * BOX_SPIN_CLASSES.length)];
                 if (status === 'idle') {
                     setStatus('typing');
                     setStartTime(Date.now());
@@ -362,6 +674,64 @@
                 setSessionStartLength(0);
             };
 
+            const loadWikipediaArticle = async (urlOrTitle) => {
+                if (!urlOrTitle.trim()) return;
+                setIsLoadingWiki(true);
+                setWikiError('');
+                try {
+                    let title = urlOrTitle.trim();
+                    const urlMatch = title.match(/wikipedia\.org\/wiki\/([^#?]+)/);
+                    if (urlMatch) title = decodeURIComponent(urlMatch[1]);
+
+                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=${encodeURIComponent(title)}&explaintext=true&exsectionformat=plain&format=json&origin=*`);
+                    const data = await res.json();
+                    const page = Object.values(data.query.pages)[0];
+
+                    if (page.missing !== undefined) { setWikiError('Article not found.'); return; }
+                    if (!page.extract || page.extract.trim().length < 10) { setWikiError('Article has no content. Try another.'); return; }
+
+                    setWikiArticleTitle(page.title);
+                    setSourceText(normalizeText(page.extract));
+                    resetProgress();
+                } catch {
+                    setWikiError('Failed to load article.');
+                } finally {
+                    setIsLoadingWiki(false);
+                }
+            };
+
+            const randomize = () => {
+                const themeKeys = Object.keys(BRUTALIST_THEMES);
+                const fontKeys = Object.keys(FONTS);
+                const cursorKeys = Object.keys(CURSORS);
+                setTheme(themeKeys[Math.floor(Math.random() * themeKeys.length)]);
+                setColorMode(Math.random() < 0.5 ? '2-color' : '3-color');
+                setFont(fontKeys[Math.floor(Math.random() * fontKeys.length)]);
+                setCursorStyle(cursorKeys[Math.floor(Math.random() * cursorKeys.length)]);
+                typingAreaRef.current?.focus();
+            };
+
+            const loadRandomWikipediaArticle = async () => {
+                setIsLoadingWiki(true);
+                setWikiError('');
+                try {
+                    const summaryRes = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/summary');
+                    const summary = await summaryRes.json();
+                    const res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&prop=extracts&titles=${encodeURIComponent(summary.title)}&explaintext=true&exsectionformat=plain&format=json&origin=*`);
+                    const data = await res.json();
+                    const page = Object.values(data.query.pages)[0];
+
+                    setWikiArticleTitle(page.title);
+                    setWikiUrl(summary.title);
+                    setSourceText(normalizeText(page.extract));
+                    resetProgress();
+                } catch {
+                    setWikiError('Failed to load random article.');
+                } finally {
+                    setIsLoadingWiki(false);
+                }
+            };
+
             const renderText = () => {
                 return currentText.split('').map((char, index) => {
                     let charStatus = 'untyped'; 
@@ -376,10 +746,13 @@
                     const isJustTypedCorrectly = index === typedChars.length - 1 && charStatus === 'correct';
                     
                     let textClasses = 'transition-opacity duration-75 cursor-pointer hover:opacity-100';
-                    let textStyleObj = {};
+                    let textStyleObj = { ...syntaxTheme.base };
                     
                     if (charStatus === 'correct') {
-                        textClasses += ` ${syntaxClasses[index] || 'opacity-100'}`;
+                        const tokenType = syntaxTokens[index];
+                        if (tokenType && syntaxTheme[tokenType]) {
+                            textStyleObj = { ...textStyleObj, ...syntaxTheme[tokenType] };
+                        }
                     } else if (charStatus === 'error') {
                         textClasses += ' line-through opacity-100';
                         textStyleObj = { color: BRUTALIST_ERROR_RED, backgroundColor: `${BRUTALIST_ERROR_RED}33` };
@@ -421,8 +794,13 @@
                             style={textStyleObj}
                         >
                             {/* Standard Overlay Cursors */}
-                            {isCurrent && ['line', 'underline', 'neon-pulse'].includes(cursorStyle) && (
+                            {isCurrent && ['line', 'underline'].includes(cursorStyle) && (
                                 <span className={`absolute left-0 top-0 h-full min-w-[1ch] w-full ${CURSORS[cursorStyle]} pointer-events-none`} />
+                            )}
+
+                            {/* Neon Tube Cursor */}
+                            {isCurrent && cursorStyle === 'neon-pulse' && (
+                                <span className="absolute left-0 top-0 h-full w-[3px] cursor-neon-bar pointer-events-none" />
                             )}
                             
                             {/* Rainbow Cursors */}
@@ -432,10 +810,10 @@
 
                             {/* Kinetic Boxes */}
                             {isCurrent && cursorStyle === 'pulsing-box' && (
-                                <span className="absolute inset-0 border-2 border-current animate-pulse pointer-events-none opacity-80" />
+                                <span className="absolute inset-0 border-2 border-current pointer-events-none animate-box-breathe" />
                             )}
                             {isJustTypedCorrectly && cursorStyle === 'pulsing-box' && (
-                                <span className="absolute inset-0 border-2 border-current pointer-events-none animate-box-explode" />
+                                <span className={`absolute inset-0 border-2 border-current pointer-events-none ${boxSpinClassRef.current}`} />
                             )}
                             {isJustTypedCorrectly && cursorStyle === 'exploding-rainbow-vomit' && (
                                 <span className="absolute left-1/2 top-1/2 w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none animate-rainbow-particles" />
@@ -460,56 +838,84 @@
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={handleDrop}
                 >
-                    <header className="p-4 flex flex-wrap justify-between items-start border-b-2 border-current border-opacity-20 gap-4">
-                        <h1 className="text-3xl font-bold tracking-tight mt-1 uppercase">TypoForge</h1>
-                        
-                        <div className="flex flex-col gap-3 items-end">
-                            {/* Option Toggles */}
-                            <div className="flex gap-4 text-sm font-sans tracking-wide font-bold uppercase opacity-80">
-                                <label className="flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
-                                    <input type="checkbox" checked={isCodeMode} onChange={(e) => setIsCodeMode(e.target.checked)} className="accent-current" />
-                                    Syntax
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
-                                    <input type="checkbox" checked={ignoreCaps} onChange={(e) => setIgnoreCaps(e.target.checked)} className="accent-current" />
-                                    No Caps
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer hover:opacity-100 transition-opacity">
-                                    <input type="checkbox" checked={tolerantWhitespace} onChange={(e) => setTolerantWhitespace(e.target.checked)} className="accent-current" />
-                                    Lenient Whitespace
-                                </label>
-                            </div>
+                    <header className="p-4 flex flex-wrap justify-between items-center border-b-2 border-current border-opacity-20 gap-x-6 gap-y-2">
+                        <h1 className="text-3xl font-bold tracking-tight uppercase shrink-0">TypoForge</h1>
+
+                        <div className="flex flex-wrap gap-x-3 gap-y-2 items-center justify-end text-sm font-bold">
+                            {/* Wikipedia */}
+                            <input
+                                type="text"
+                                value={wikiUrl}
+                                onChange={(e) => setWikiUrl(e.target.value)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); loadWikipediaArticle(wikiUrl); } }}
+                                placeholder="Wikipedia article or URL..."
+                                className="border-2 border-current px-3 py-1 outline-none font-bold w-52"
+                                style={{ backgroundColor: currentPanel, color: currentInk }}
+                            />
+                            <button onMouseDown={(e) => e.preventDefault()} onClick={() => loadWikipediaArticle(wikiUrl)} disabled={isLoadingWiki} className="px-3 py-1 border-2 border-current invert-on-hover uppercase disabled:opacity-40">
+                                {isLoadingWiki ? '...' : 'Load'}
+                            </button>
+                            <button onMouseDown={(e) => e.preventDefault()} onClick={loadRandomWikipediaArticle} disabled={isLoadingWiki} className="px-3 py-1 border-2 border-dashed border-current invert-on-hover uppercase disabled:opacity-40">
+                                Random
+                            </button>
+                            {wikiError && <span className="font-bold" style={{ color: BRUTALIST_ERROR_RED }}>{wikiError}</span>}
+                            {wikiArticleTitle && !wikiError && <span className="uppercase opacity-50 max-w-[7rem] truncate" title={wikiArticleTitle}>{wikiArticleTitle}</span>}
+
+                            <span className="opacity-20 select-none px-1">|</span>
+                            <button onMouseDown={(e) => e.preventDefault()} onClick={() => setShowLibrary(true)} className="px-3 py-1 border-2 border-current invert-on-hover uppercase">
+                                Library
+                            </button>
+
+                            <span className="opacity-20 select-none px-1">|</span>
+
+                            {/* Toggles */}
+                            <label className="flex items-center gap-1.5 cursor-pointer uppercase tracking-wide hover:opacity-100 transition-opacity opacity-80">
+                                <input type="checkbox" checked={isCodeMode} onChange={(e) => { setIsCodeMode(e.target.checked); typingAreaRef.current?.focus(); }} className="accent-current" />
+                                Syntax
+                            </label>
+                            <label className="flex items-center gap-1.5 cursor-pointer uppercase tracking-wide hover:opacity-100 transition-opacity opacity-80">
+                                <input type="checkbox" checked={ignoreCaps} onChange={(e) => { setIgnoreCaps(e.target.checked); typingAreaRef.current?.focus(); }} className="accent-current" />
+                                No Caps
+                            </label>
+                            <label className="flex items-center gap-1.5 cursor-pointer uppercase tracking-wide hover:opacity-100 transition-opacity opacity-80">
+                                <input type="checkbox" checked={tolerantWhitespace} onChange={(e) => { setTolerantWhitespace(e.target.checked); typingAreaRef.current?.focus(); }} className="accent-current" />
+                                Lenient WS
+                            </label>
+
+                            <span className="opacity-20 select-none px-1">|</span>
 
                             {/* Dropdowns */}
-                            <div className="flex gap-2 text-sm items-center flex-wrap justify-end">
-                                <select value={theme} onChange={(e) => setTheme(e.target.value)} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
-                                    {Object.keys(BRUTALIST_THEMES).map(k => <option key={k} value={k} style={{background: currentSurface, color: currentInk}}>{k}</option>)}
-                                </select>
-
-                                <select value={colorMode} onChange={(e) => setColorMode(e.target.value)} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
-                                    <option value="3-color" style={{background: currentSurface, color: currentInk}}>3-Color (Pop)</option>
-                                    <option value="2-color" style={{background: currentSurface, color: currentInk}}>2-Color (Flat)</option>
-                                </select>
-
-                                <select value={font} onChange={(e) => setFont(e.target.value)} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
-                                    <option value="mono" style={{background: currentSurface, color: currentInk}}>Monospace</option>
-                                    <option value="sans" style={{background: currentSurface, color: currentInk}}>Sans Serif</option>
-                                    <option value="serif" style={{background: currentSurface, color: currentInk}}>Serif</option>
-                                    <option value="space" style={{background: currentSurface, color: currentInk}}>Space Mono</option>
-                                    <option value="typewriter" style={{background: currentSurface, color: currentInk}}>Special Elite</option>
-                                    <option value="handwritten" style={{background: currentSurface, color: currentInk}}>Patrick Hand</option>
-                                </select>
-
-                                <select value={cursorStyle} onChange={(e) => setCursorStyle(e.target.value)} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
-                                    <option value="line" style={{background: currentSurface, color: currentInk}}>Line Cursor</option>
-                                    <option value="block" style={{background: currentSurface, color: currentInk}}>Block Cursor</option>
-                                    <option value="underline" style={{background: currentSurface, color: currentInk}}>Underline</option>
-                                    <option value="neon-pulse" style={{background: currentSurface, color: currentInk}}>Neon Pulse</option>
-                                    <option value="rainbow-vomit" style={{background: currentSurface, color: currentInk}}>Rainbow Vomit</option>
-                                    <option value="pulsing-box" style={{background: currentSurface, color: currentInk}}>Pulsing Box</option>
-                                    <option value="exploding-rainbow-vomit" style={{background: currentSurface, color: currentInk}}>Exploding Rainbow</option>
-                                </select>
-                            </div>
+                            <button onMouseDown={(e) => e.preventDefault()} onClick={randomize} className="px-3 py-1 border-2 border-current border-dashed invert-on-hover uppercase" title="Randomize theme, colors, font, and cursor">?</button>
+                            <select value={theme} onChange={(e) => {
+                                const t = e.target.value;
+                                setTheme(t);
+                                if (t === 'Terminal') { setColorMode('2-color'); setFont('terminal'); setCursorStyle('block'); }
+                                else if (t === 'Cream') { setColorMode('3-color'); setFont('typewriter'); setCursorStyle('exploding-rainbow-vomit'); }
+                                typingAreaRef.current?.focus();
+                            }} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
+                                {Object.keys(BRUTALIST_THEMES).map(k => <option key={k} value={k} style={{background: currentSurface, color: currentInk}}>{k}</option>)}
+                            </select>
+                            <select value={colorMode} onChange={(e) => { setColorMode(e.target.value); typingAreaRef.current?.focus(); }} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
+                                <option value="3-color" style={{background: currentSurface, color: currentInk}}>3-Color</option>
+                                <option value="2-color" style={{background: currentSurface, color: currentInk}}>2-Color</option>
+                            </select>
+                            <select value={font} onChange={(e) => { setFont(e.target.value); typingAreaRef.current?.focus(); }} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
+                                <option value="terminal" style={{background: currentSurface, color: currentInk}}>Share Tech</option>
+                                <option value="sans" style={{background: currentSurface, color: currentInk}}>Sans</option>
+                                <option value="serif" style={{background: currentSurface, color: currentInk}}>Serif</option>
+                                <option value="space" style={{background: currentSurface, color: currentInk}}>Space Mono</option>
+                                <option value="typewriter" style={{background: currentSurface, color: currentInk}}>Special Elite</option>
+                                <option value="handwritten" style={{background: currentSurface, color: currentInk}}>Patrick Hand</option>
+                            </select>
+                            <select value={cursorStyle} onChange={(e) => { setCursorStyle(e.target.value); typingAreaRef.current?.focus(); }} className="bg-transparent border-2 border-current rounded-none px-2 py-1 font-bold outline-none cursor-pointer">
+                                <option value="line" style={{background: currentSurface, color: currentInk}}>Line</option>
+                                <option value="block" style={{background: currentSurface, color: currentInk}}>Block</option>
+                                <option value="underline" style={{background: currentSurface, color: currentInk}}>Underline</option>
+                                <option value="neon-pulse" style={{background: currentSurface, color: currentInk}}>Neon Pulse</option>
+                                <option value="rainbow-vomit" style={{background: currentSurface, color: currentInk}}>Rainbow Vomit</option>
+                                <option value="pulsing-box" style={{background: currentSurface, color: currentInk}}>Pulsing Box</option>
+                                <option value="exploding-rainbow-vomit" style={{background: currentSurface, color: currentInk}}>Exploding Rainbow</option>
+                            </select>
                         </div>
                     </header>
 
@@ -524,18 +930,18 @@
                             <div className="flex gap-6 items-center border-2 border-current px-4 py-2">
                                 {/* Font Size */}
                                 <div className="flex items-center gap-3">
-                                    <button onClick={() => setFontSize(Math.max(12, fontSize - 2))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Decrease Font Size">−</button>
+                                    <button onMouseDown={(e) => e.preventDefault()} onClick={() => setFontSize(Math.max(12, fontSize - 2))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Decrease Font Size">−</button>
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
                                         <polyline points="4 7 4 4 20 4 20 7"></polyline>
                                         <line x1="9" y1="20" x2="15" y2="20"></line>
                                         <line x1="12" y1="4" x2="12" y2="20"></line>
                                     </svg>
-                                    <button onClick={() => setFontSize(Math.min(64, fontSize + 2))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Increase Font Size">+</button>
+                                    <button onMouseDown={(e) => e.preventDefault()} onClick={() => setFontSize(Math.min(64, fontSize + 2))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Increase Font Size">+</button>
                                 </div>
 
                                 {/* Spacing */}
                                 <div className="flex items-center gap-3 border-l-2 border-current pl-6">
-                                    <button onClick={() => setLetterSpacing(Math.max(-4, letterSpacing - 1))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Decrease Spacing">−</button>
+                                    <button onMouseDown={(e) => e.preventDefault()} onClick={() => setLetterSpacing(Math.max(-4, letterSpacing - 1))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Decrease Spacing">−</button>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square">
                                         <path d="M6 3v18"></path>
                                         <path d="M18 3v18"></path>
@@ -543,7 +949,7 @@
                                         <path d="M12 9l3 3-3 3"></path>
                                         <path d="M12 9l-3 3 3 3"></path>
                                     </svg>
-                                    <button onClick={() => setLetterSpacing(Math.min(12, letterSpacing + 1))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Increase Spacing">+</button>
+                                    <button onMouseDown={(e) => e.preventDefault()} onClick={() => setLetterSpacing(Math.min(12, letterSpacing + 1))} className="w-8 h-8 flex items-center justify-center border border-current invert-on-hover text-xl" title="Increase Spacing">+</button>
                                 </div>
                             </div>
 
@@ -571,18 +977,18 @@
 
                         <div className="mt-8 flex gap-4 items-center font-bold uppercase">
                             {status === 'finished_chunk' && (
-                                <button onClick={nextChunk} className="px-6 py-3 border-4 border-current invert-on-hover">
+                                <button onMouseDown={(e) => e.preventDefault()} onClick={nextChunk} className="px-6 py-3 border-4 border-current invert-on-hover">
                                     Next Chunk (Enter)
                                 </button>
                             )}
                             {status === 'finished_all' && (
                                 <div className="text-2xl">Session Complete.</div>
                             )}
-                            
-                            <button onClick={resetProgress} className="px-4 py-3 border-2 border-current border-opacity-50 invert-on-hover">
+
+                            <button onMouseDown={(e) => e.preventDefault()} onClick={resetProgress} className="px-4 py-3 border-2 border-current border-opacity-50 invert-on-hover">
                                 Restart
                             </button>
-                            
+
                             <label className="cursor-pointer">
                                 <input type="file" accept=".txt,.md,.js,.py,.jsx,.html,.css" onChange={handleDrop} className="hidden" />
                                 <div className="px-4 py-3 border-2 border-dashed border-current invert-on-hover">
@@ -590,11 +996,22 @@
                                 </div>
                             </label>
                         </div>
+
                     </main>
 
                     <footer className="p-4 text-center font-bold uppercase opacity-50 pb-8 text-sm">
-                        Click the text box to start. Drag & drop a file, or paste text directly. 
+                        Click the text box to start. Drag & drop a file, or paste text directly.
                     </footer>
+
+                    {showLibrary && (
+                        <LibraryModal
+                            onClose={() => { setShowLibrary(false); typingAreaRef.current?.focus(); }}
+                            onImport={text => { setSourceText(normalizeText(text)); setIsCodeMode(false); resetProgress(); }}
+                            currentPanel={currentPanel}
+                            currentInk={currentInk}
+                            currentSurface={currentSurface}
+                        />
+                    )}
                 </div>
             );
         }
