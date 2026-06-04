@@ -92,6 +92,12 @@
             animation: rainbow-particle-explosion 0.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
 
+        @keyframes milestone-flash {
+            0%   { transform: scale(1.8); opacity: 1; }
+            100% { transform: scale(1);   opacity: 1; }
+        }
+        .animate-milestone-flash { animation: milestone-flash 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); }
+
         .invert-on-hover { transition: all 0.2s ease; cursor: pointer; }
         .invert-on-hover:hover {
             background-color: var(--theme-ink) !important;
@@ -171,6 +177,17 @@
         ];
 
         const normalizeText = (text) => text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const sanitizeText = (text) => text
+            .replace(/[—–‒―−]/g, '-')     // em dash, en dash, figure dash, horizontal bar, minus sign
+            .replace(/[‘’‚‛′‹]/g, "'") // curly/angled single quotes, prime
+            .replace(/[“”„‟″«»]/g, '"') // curly double quotes, double prime, angle quotes
+            .replace(/…/g, '...')                              // ellipsis
+            .replace(/[    　]/g, ' ')     // non-breaking and narrow spaces
+            .replace(/[​-‏  ﻿­]/g, '') // zero-width, line/para separators, soft hyphen
+            .replace(/[•‣⁃◦]/g, '-')            // bullets
+            .replace(/×/g, 'x')                                // multiplication sign
+            .replace(/÷/g, '/')                                // division sign
+            .replace(/⁄/g, '/');                               // fraction slash
         const DEFAULT_TEXT = normalizeText("Drop/paste some text/code or use the wikipedia options above to get started.\n\nconst name=\"WORLD\";\n\nfunction greet(name) {\n  console.log(`Hello ${name}!`);\n}\n\nOnce you drop a file or paste text, you can start typing immediately.");
         const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
         const hexToRgb = (hex) => {
@@ -428,6 +445,10 @@
             const [wikiError, setWikiError] = useState('');
             const [wikiArticleTitle, setWikiArticleTitle] = useState('');
             const [showLibrary, setShowLibrary] = useState(false);
+            const [streak, setStreak] = useState(0);
+            const [maxStreak, setMaxStreak] = useState(0);
+            const [milestoneBit, setMilestoneBit] = useState(-1);
+            const milestoneBitTimerRef = useRef(null);
 
             const typingAreaRef = useRef(null);
             const boxSpinClassRef = useRef(BOX_SPIN_CLASSES[0]);
@@ -514,6 +535,20 @@
 
                 return { wpm, accuracy, correctCount };
             }, [typedChars, currentText, startTime, sessionStartLength, ignoreCaps, tolerantWhitespace]);
+
+            useEffect(() => {
+                if (streak > maxStreak) {
+                    for (let bit = 7; bit >= 0; bit--) {
+                        if (streak >= (1 << bit) && maxStreak < (1 << bit)) {
+                            if (milestoneBitTimerRef.current) clearTimeout(milestoneBitTimerRef.current);
+                            setMilestoneBit(bit);
+                            milestoneBitTimerRef.current = setTimeout(() => setMilestoneBit(-1), 500);
+                            break;
+                        }
+                    }
+                    setMaxStreak(streak);
+                }
+            }, [streak, maxStreak]);
 
             const handleKeyDown = (e) => {
                 if (e.key === ' ' && e.target === typingAreaRef.current) e.preventDefault();
@@ -606,6 +641,18 @@
                 }
 
                 if (typedChars.length < currentText.length) {
+                    let allCorrect = true;
+                    for (let i = 0; i < chars.length; i++) {
+                        const typed = chars[i];
+                        const expected = currentText[typedChars.length + i];
+                        let match = typed === expected;
+                        if (!match && ignoreCaps && typed.toLowerCase() === expected.toLowerCase()) match = true;
+                        if (!match && tolerantWhitespace && (typed === ' ' || typed === '\n') && (expected === ' ' || expected === '\n')) match = true;
+                        if (!match) { allCorrect = false; break; }
+                    }
+                    if (allCorrect) setStreak(prev => prev + chars.length);
+                    else setStreak(0);
+
                     setTypedChars(prev => {
                         const nextTyped = prev + chars;
                         if (nextTyped.length >= currentText.length) {
@@ -644,7 +691,7 @@
             const handlePaste = (e) => {
                 const text = e.clipboardData.getData('text');
                 if (text) {
-                    setSourceText(normalizeText(text));
+                    setSourceText(normalizeText(sanitizeText(text)));
                     resetProgress();
                 }
             };
@@ -663,6 +710,7 @@
                 setStatus('idle');
                 setStartTime(null);
                 setSessionStartLength(0);
+                setStreak(0);
                 if (typingAreaRef.current) typingAreaRef.current.focus();
             };
 
@@ -672,6 +720,7 @@
                 setStatus('idle');
                 setStartTime(null);
                 setSessionStartLength(0);
+                setStreak(0);
             };
 
             const loadWikipediaArticle = async (urlOrTitle) => {
@@ -921,9 +970,31 @@
 
                     <main className="flex-grow flex flex-col items-center justify-center p-8 max-w-6xl mx-auto w-full">
                         <div className="w-full flex flex-wrap justify-between items-end mb-4 gap-4 uppercase font-bold">
-                            <div className="flex gap-8">
+                            <div className="flex gap-8 items-end">
                                 <div className="text-5xl">{stats.wpm} <span className="text-sm opacity-60">WPM</span></div>
                                 <div className="text-5xl">{stats.accuracy}% <span className="text-sm opacity-60">ACC</span></div>
+                                <div className="flex flex-col pb-1 leading-none gap-1">
+                                    <div className="flex gap-[2px] font-terminal">
+                                        {Array.from({length: 8}, (_, i) => {
+                                            const bitPos = 7 - i;
+                                            const bitValue = (maxStreak >> bitPos) & 1;
+                                            const dotLit = maxStreak >= (1 << bitPos);
+                                            const isFlashing = milestoneBit === bitPos;
+                                            return (
+                                                <div key={bitPos} className={`flex flex-col items-center ${isFlashing ? 'animate-milestone-flash' : ''}`} style={{width: '1.25ch'}}>
+                                                    <span className={`text-xl leading-none ${bitValue ? 'opacity-100' : 'opacity-20'}`}>{bitValue}</span>
+                                                    <div className={`w-1.5 h-1.5 rounded-full mt-[3px] ${dotLit ? 'opacity-100' : 'opacity-10'}`} style={{backgroundColor: 'currentColor'}} />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-sm uppercase tracking-wide">
+                                        <span className="opacity-60">BEST ({maxStreak})</span>
+                                        <span className="opacity-20 select-none">·</span>
+                                        <span>NOW {streak}</span>
+                                        <button onMouseDown={e => e.preventDefault()} onClick={() => { setMaxStreak(0); setMilestoneBit(-1); }} className="opacity-30 hover:opacity-100 transition-opacity border border-current px-1 leading-tight" title="Reset best streak">×</button>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Brutalist Toolbar */}
