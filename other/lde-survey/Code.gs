@@ -16,7 +16,9 @@ const HEADERS = [
   'visitorHomeScene',
   'visitorHowHeard',
   'visitorNotes',
-  'rawJson'
+  'rawJson',
+  'contactName',
+  'contactEmail'
 ];
 
 function doPost(e) {
@@ -59,8 +61,9 @@ function ensureHeaders_(sheet) {
   const range = sheet.getRange(1, 1, 1, HEADERS.length);
   const currentHeaders = range.getValues()[0];
   const hasHeaders = currentHeaders.some(Boolean);
+  const headersMatch = HEADERS.every((header, index) => currentHeaders[index] === header);
 
-  if (!hasHeaders) {
+  if (!hasHeaders || !headersMatch) {
     range.setValues([HEADERS]);
     sheet.setFrozenRows(1);
   }

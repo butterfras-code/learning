@@ -534,7 +534,10 @@
         <div id="unhappy-box" class="field" style="display:none">
           <label for="unhappyNote">Tell us what's going on <span class="required-star" aria-hidden="true">*</span></label>
           <textarea id="unhappyNote"></textarea>
-          <button class="btn" type="button" data-submit onclick="submitSurvey()">Submit</button>
+          <div class="two-grid">
+            <button class="btn" type="button" data-submit data-submit-label="Submit and be done with it!" onclick="submitSurvey()">Submit and be done with it!</button>
+            <button class="btn" type="button" onclick="continueAfterUnhappy()">Complete the rest of the survey</button>
+          </div>
           <div id="error-1" class="error"></div>
         </div>
       </section>
@@ -562,6 +565,15 @@
 
       <section id="screen-3" class="screen center">
         <h2 class="screen-title">Who Are You and How did you get here?</h2>
+        <div class="field">
+          <p class="prompt-text">If you want us to tell you about the next one, let us know how.</p>
+          <label for="contactName">Name (optional)</label>
+          <input id="contactName" type="text" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="contactEmail">E-mail (optional)</label>
+          <input id="contactEmail" type="email" autocomplete="email">
+        </div>
         <p class="prompt-text">Are you a Neon Boots regular or visiting for LDE? <span class="required-star" aria-hidden="true">*</span></p>
         <div class="two-grid">
           <button class="btn" type="button" onclick="setAttendee('regular')">Neon Boots Regular</button>
@@ -644,6 +656,8 @@
       walkthroughs: '',
       favoriteStyles: [],
       attendeeType: '',
+      contactName: '',
+      contactEmail: '',
       lessonDifficulty: '',
       lessonGenreMix: '',
       lessonPacing: '',
@@ -685,7 +699,7 @@
       ).join('');
 
       document.body.addEventListener('click', handlePillClick);
-      ['visitorHomeScene', 'visitorHowHeard'].forEach((id) => {
+      ['contactName', 'contactEmail', 'visitorHomeScene', 'visitorHowHeard'].forEach((id) => {
         document.getElementById(id).addEventListener('input', (event) => {
           state[id] = event.target.value;
           render();
@@ -752,7 +766,14 @@
       render();
     }
 
+    function continueAfterUnhappy() {
+      syncTextFields();
+      if (!validateCurrentScreen()) return;
+      goTo(2);
+    }
+
     function setAttendee(type) {
+      syncTextFields();
       state.attendeeType = type;
       goTo(4);
     }
@@ -815,14 +836,14 @@
     function buildPayload() {
       const base = {
         havingFun: state.havingFun,
+        unhappyNote: state.havingFun === false ? state.unhappyNote.trim() : '',
+        contactName: state.contactName.trim(),
+        contactEmail: state.contactEmail.trim(),
         submittedAt: new Date().toISOString()
       };
 
-      if (!state.havingFun) {
-        return {
-          ...base,
-          unhappyNote: state.unhappyNote.trim()
-        };
+      if (state.havingFun === false && !state.attendeeType) {
+        return base;
       }
 
       const eventPayload = {
@@ -854,6 +875,8 @@
 
     function syncTextFields() {
       state.unhappyNote = document.getElementById('unhappyNote').value;
+      state.contactName = document.getElementById('contactName').value;
+      state.contactEmail = document.getElementById('contactEmail').value;
       state.regularNotes = document.getElementById('regularNotes').value;
       state.visitorHomeScene = document.getElementById('visitorHomeScene').value;
       state.visitorHowHeard = document.getElementById('visitorHowHeard').value;
@@ -967,7 +990,7 @@
     function setSubmitting(isSubmitting) {
       document.querySelectorAll('[data-submit]').forEach((button) => {
         button.disabled = isSubmitting ? true : false;
-        button.textContent = isSubmitting ? 'Submitting...' : 'Submit';
+        button.textContent = isSubmitting ? 'Submitting...' : button.dataset.submitLabel || 'Submit';
       });
       if (!isSubmitting) render();
     }
@@ -997,6 +1020,8 @@
         walkthroughs: '',
         favoriteStyles: [],
         attendeeType: '',
+        contactName: '',
+        contactEmail: '',
         lessonDifficulty: '',
         lessonGenreMix: '',
         lessonPacing: '',
@@ -1005,7 +1030,7 @@
         visitorHowHeard: '',
         visitorNotes: ''
       });
-      ['unhappyNote', 'regularNotes', 'visitorHomeScene', 'visitorHowHeard', 'visitorNotes'].forEach((id) => {
+      ['unhappyNote', 'contactName', 'contactEmail', 'regularNotes', 'visitorHomeScene', 'visitorHowHeard', 'visitorNotes'].forEach((id) => {
         document.getElementById(id).value = '';
       });
       document.getElementById('unhappy-box').style.display = 'none';
