@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neon Boots Line Dance Extravaganza Survey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #04c7c9;
+      --pink: #ff1979;
+      --purple: #bb00df;
+      --yellow: #ffd83f;
+      --ink: #080808;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100dvh;
+      color: var(--ink);
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 92% 5%, var(--pink) 0 4.6rem, transparent 4.75rem),
+        linear-gradient(170deg, var(--teal) 0 18%, var(--purple) 18% 74%, var(--teal) 74%);
+    }
+
+    button, input, textarea { font: inherit; }
+
+    .page {
+      width: min(100%, 980px);
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .disc {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--ink);
+      border-radius: 50%;
+      background: conic-gradient(var(--pink), var(--yellow), var(--teal), var(--pink));
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .back-button {
+      display: inline-grid;
+      place-items: center;
+      padding: 0;
+      color: var(--ink);
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+    }
+
+    .back-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .back-button:disabled {
+      opacity: .45;
+      cursor: default;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .logo {
+      margin: 0;
+      color: var(--yellow);
+      font-family: "Luckiest Guy", Impact, sans-serif;
+      font-size: clamp(24px, 10vw, 38px);
+      line-height: .9;
+      -webkit-text-stroke: 1.5px var(--ink);
+      paint-order: stroke fill;
+    }
+
+    .badge {
+      display: none;
+      border: 4px solid var(--ink);
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: var(--white);
+      box-shadow: 4px 4px 0 var(--ink);
+      font-weight: 900;
+    }
+
+    .card {
+      margin: 0 0 12px;
+      border: 4px solid var(--ink);
+      border-radius: 18px;
+      background: var(--white);
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 14px;
+    }
+
+    .progress {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .bar {
+      height: 10px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: #ddd;
+    }
+
+    .bar.active { background: var(--pink); }
+
+    [hidden], .screen:not(.active) { display: none !important; }
+    .screen.active { display: block; }
+    .screen.active.stack { display: grid; }
+
+    h1, h2, h3, p { overflow-wrap: anywhere; }
+
+    .poster-title {
+      margin: 0;
+      color: var(--white);
+      font-family: "Luckiest Guy", Impact, sans-serif;
+      font-size: clamp(40px, 15vw, 62px);
+      line-height: .95;
+      text-align: center;
+      text-shadow: 2px 2px 0 var(--ink), -1.5px -1.5px 0 var(--ink), 1.5px -1.5px 0 var(--ink), -1.5px 1.5px 0 var(--ink);
+    }
+
+    .screen-title {
+      margin: 0 0 14px;
+      color: var(--yellow);
+      font-family: "Luckiest Guy", Impact, sans-serif;
+      font-size: clamp(31px, 12vw, 44px);
+      line-height: .95;
+      -webkit-text-stroke: 1.5px var(--ink);
+      paint-order: stroke fill;
+    }
+
+    .center { text-align: center; }
+    .stack { display: grid; gap: 18px; }
+
+    .emoji-grid, .two-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .emoji-btn {
+      min-height: 128px;
+      border: 4px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 4px 4px 0 var(--ink);
+      background: var(--yellow);
+      font-size: 64px;
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .emoji-btn.no { background: var(--pink); }
+
+    .btn, .pill {
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 3px 3px 0 var(--ink);
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .btn:hover, .pill:hover, .emoji-btn:hover { transform: translateY(-2px); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 52px;
+      width: 100%;
+      padding: 11px 16px;
+      color: var(--white);
+      background: var(--pink);
+      font-size: 16px;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .btn:disabled, .btn.is-disabled {
+      opacity: .45;
+      cursor: pointer;
+      transform: none;
+    }
+
+    .pill-row {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .cloud + .cloud { margin-top: 10px; }
+
+    .pill {
+      min-height: 46px;
+      padding: 10px 13px;
+      background: var(--white);
+      font-size: 15px;
+      line-height: 1.15;
+    }
+
+    .pill.selected {
+      background: var(--yellow) !important;
+      box-shadow: none;
+      transform: translate(3px, 3px);
+      outline: 3px solid var(--pink);
+    }
+
+    .tone-yellow { background: var(--yellow); }
+    .tone-teal { background: var(--teal); }
+    .tone-pink { background: var(--pink); color: var(--white); }
+    .tone-purple { background: var(--purple); color: var(--white); }
+
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    input, textarea {
+      width: 100%;
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      background: #f7f7f7;
+      padding: 12px;
+      font-weight: 800;
+      outline: none;
+      font-size: 16px;
+    }
+
+    input:focus, textarea:focus {
+      background: var(--white);
+      box-shadow: 0 0 0 4px var(--yellow);
+    }
+
+    textarea {
+      min-height: 118px;
+      resize: vertical;
+    }
+
+    .field { margin-top: 18px; text-align: left; }
+
+    .required-star {
+      color: var(--pink);
+      font-weight: 900;
+    }
+
+    .required-missing {
+      animation: missingPulse .85s ease both;
+      scroll-margin-top: 18px;
+    }
+
+    .error {
+      display: none;
+      margin-top: 14px;
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      background: var(--yellow);
+      padding: 12px;
+      font-weight: 900;
+    }
+
+    .info {
+      display: grid;
+      gap: 12px;
+      border: 4px solid var(--ink);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 3px 3px 0 var(--ink);
+      font-weight: 800;
+    }
+
+    .info h3 {
+      margin: 0;
+      color: var(--white);
+      font-family: "Luckiest Guy", Impact, sans-serif;
+      font-size: 28px;
+      line-height: .98;
+      -webkit-text-stroke: 1.3px var(--ink);
+      paint-order: stroke fill;
+    }
+
+    .info p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+    .yellow { background: var(--yellow); }
+    .teal { background: var(--teal); }
+
+    .prompt-text {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.25;
+    }
+
+    .thankyou-lede {
+      margin: 10px 0 0;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .party-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .party-piece {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      font-size: var(--size);
+      opacity: 0;
+      filter: drop-shadow(1.5px 1.5px 0 var(--ink));
+      transform: translate(-50%, -50%);
+      animation: glitterFloat var(--duration) cubic-bezier(.16, .8, .24, 1) forwards;
+    }
+
+    .party-piece.boot {
+      animation-name: bootKick;
+    }
+
+    @keyframes glitterFloat {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.45) rotate(0deg); }
+      12% { opacity: 1; }
+      78% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.1) rotate(var(--spin));
+      }
+    }
+
+    @keyframes bootKick {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.45) rotate(-18deg); }
+      12% { opacity: 1; }
+      70% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.18) rotate(var(--spin));
+      }
+    }
+
+    @keyframes missingPulse {
+      0%, 100% { transform: translateX(0); }
+      18% { transform: translateX(-7px); }
+      36% { transform: translateX(7px); }
+      54% { transform: translateX(-5px); }
+      72% { transform: translateX(5px); }
+    }
+
+    @media (min-width: 520px) {
+      .page { padding: 16px; }
+      .card {
+        border-width: 5px;
+        border-radius: 24px;
+        box-shadow: 6px 6px 0 var(--ink);
+        padding: 22px;
+      }
+      .pill-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .emoji-btn { min-height: 150px; }
+    }
+
+    @media (min-width: 700px) {
+      body {
+        background:
+          radial-gradient(circle at 88% 10%, var(--pink) 0 8rem, transparent 8.2rem),
+          linear-gradient(172deg, var(--teal) 0 22%, var(--purple) 22% 72%, var(--teal) 72%);
+      }
+      .badge { display: block; }
+      .topbar {
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .disc {
+        width: 68px;
+        height: 68px;
+        border-width: 5px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .eyebrow { font-size: 12px; }
+      .logo {
+        font-size: clamp(36px, 6vw, 48px);
+        -webkit-text-stroke-width: 2px;
+      }
+      .card {
+        margin: auto 0;
+        border-width: 6px;
+        border-radius: 28px;
+        box-shadow: 7px 7px 0 var(--ink);
+        padding: clamp(24px, 5vw, 34px);
+      }
+      .progress {
+        gap: 8px;
+        margin-bottom: 28px;
+      }
+      .bar { height: 13px; }
+      .emoji-grid, .two-grid { grid-template-columns: repeat(2, 1fr); }
+      .emoji-grid, .two-grid {
+        gap: 16px;
+        margin-top: 28px;
+      }
+      .emoji-btn {
+        min-height: 170px;
+        border-width: 6px;
+        border-radius: 28px;
+        box-shadow: 7px 7px 0 var(--ink);
+        font-size: 78px;
+      }
+      .btn { width: auto; }
+      .page { padding: 22px; }
+      .poster-title { font-size: clamp(60px, 11vw, 88px); }
+      .screen-title {
+        margin-bottom: 22px;
+        font-size: clamp(44px, 8vw, 58px);
+        -webkit-text-stroke-width: 2px;
+      }
+      .stack { gap: 24px; }
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .btn, .pill {
+        border-width: 4px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .btn {
+        min-height: 56px;
+        padding: 12px 24px;
+        font-size: 18px;
+      }
+      .pill {
+        min-height: 0;
+        padding: 11px 15px;
+      }
+      label { font-size: 18px; }
+      input, textarea {
+        border-width: 4px;
+        border-radius: 18px;
+        padding: 14px;
+      }
+      textarea { min-height: 130px; }
+      .field { margin-top: 24px; }
+      .info {
+        gap: 14px;
+        border-width: 5px;
+        border-radius: 24px;
+        padding: 18px;
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+      .info h3 {
+        font-size: 34px;
+        -webkit-text-stroke-width: 1.6px;
+      }
+      .info p { font-size: 16px; }
+      .prompt-text { font-size: 24px; }
+      .thankyou-lede { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="party-burst" class="party-burst" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="topbar">
+      <div class="brand">
+        <button id="back-button" class="disc back-button" type="button" aria-label="Back" onclick="goBack()" disabled>←</button>
+        <div>
+          <p class="eyebrow">Neon Boots 22nd</p>
+          <p class="logo">Line Dance Extravaganza Survey</p>
+        </div>
+      </div>
+      <div id="screen-badge" class="badge">Vibe check</div>
+    </header>
+
+    <section class="card">
+      <div id="progress" class="progress"></div>
+
+      <section id="screen-1" class="screen active center">
+        <h1 class="poster-title">Are you having fun today? <span class="required-star" aria-hidden="true">*</span></h1>
+        <div class="emoji-grid">
+          <button class="emoji-btn" type="button" aria-label="Yes" onclick="happy()">👍</button>
+          <button class="emoji-btn no" type="button" aria-label="No" onclick="unhappy()">👎</button>
+        </div>
+        <div id="unhappy-box" class="field" style="display:none">
+          <label for="unhappyNote">Tell us what's going on <span class="required-star" aria-hidden="true">*</span></label>
+          <textarea id="unhappyNote"></textarea>
+          <button class="btn" type="button" data-submit onclick="submitSurvey()">Submit</button>
+          <div id="error-1" class="error"></div>
+        </div>
+      </section>
+
+      <section id="screen-2" class="screen stack">
+        <h2 class="screen-title">Today's Event</h2>
+        <div id="field-eventDifficulty">
+          <label>Today's dances were (difficulty): <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="eventDifficulty"></div>
+        </div>
+        <div id="field-eventGenreMix">
+          <label>The music and genre mix was: <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="eventGenreMix"></div>
+        </div>
+        <div id="field-walkthroughs">
+          <label>The walkthroughs were: <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="walkthroughs"></div>
+        </div>
+        <div id="field-favoriteStyles">
+          <label>My favorite dances are generally: (pick all that apply) <span class="required-star" aria-hidden="true">*</span></label>
+          <div id="favoriteStyles"></div>
+        </div>
+        <button id="continue-2" class="btn" type="button" onclick="continueFromEvent()">Continue</button>
+      </section>
+
+      <section id="screen-3" class="screen center">
+        <h2 class="screen-title">Who Are You and How did you get here?</h2>
+        <p class="prompt-text">Are you a Neon Boots regular or visiting for LDE? <span class="required-star" aria-hidden="true">*</span></p>
+        <div class="two-grid">
+          <button class="btn" type="button" onclick="setAttendee('regular')">Neon Boots Regular</button>
+          <button class="btn" type="button" onclick="setAttendee('visitor')">LDE Visitor</button>
+        </div>
+      </section>
+
+      <section id="screen-4a" class="screen stack">
+        <h2 class="screen-title">Thursday Lessons</h2>
+        <div id="field-lessonDifficulty">
+          <label>Thursday lessons difficulty: <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="lessonDifficulty"></div>
+        </div>
+        <div id="field-lessonGenreMix">
+          <label>The genre mix at lessons: <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="lessonGenreMix"></div>
+        </div>
+        <div id="field-lessonPacing">
+          <label>Lesson pacing: <span class="required-star" aria-hidden="true">*</span></label>
+          <div class="pill-row" data-single="lessonPacing"></div>
+        </div>
+        <div>
+          <label for="regularNotes">Any other thoughts or a dance we should learn? (optional)</label>
+          <textarea id="regularNotes"></textarea>
+        </div>
+        <button id="submit-regular" class="btn" type="button" data-submit onclick="submitSurvey()">Submit</button>
+        <div id="error-4a" class="error"></div>
+      </section>
+
+      <section id="screen-4b" class="screen stack">
+        <h2 class="screen-title">Visitors</h2>
+        <div id="field-visitorHomeScene">
+          <label for="visitorHomeScene">Where do you usually dance? <span class="required-star" aria-hidden="true">*</span></label>
+          <input id="visitorHomeScene" type="text">
+        </div>
+        <div id="field-visitorHowHeard">
+          <label for="visitorHowHeard">How did you hear about this event? <span class="required-star" aria-hidden="true">*</span></label>
+          <input id="visitorHowHeard" type="text">
+        </div>
+        <div>
+          <label for="visitorNotes">Any other thoughts or a dance we should learn? (optional)</label>
+          <textarea id="visitorNotes"></textarea>
+        </div>
+        <button id="submit-visitor" class="btn" type="button" data-submit onclick="submitSurvey()">Submit</button>
+        <div id="error-4b" class="error"></div>
+      </section>
+
+      <section id="screen-5" class="screen stack">
+        <div class="center">
+          <h2 class="poster-title">Thank you!</h2>
+          <p class="thankyou-lede">Your feedback helps keep the floor fun, welcoming, and full of music worth dancing to.</p>
+        </div>
+        <div class="info yellow">
+          <h3>Mavericks Dance Foundation</h3>
+          <p>A huge thank you to the Mavericks Dance Foundation. Many of today's instructors are members of the Mavericks Dance Team, who also opened our event with a stunning performance. The Mavericks are a Houston-based dance performance and community organization doing incredible work for our dance scene and sharing their talents at events around the country.</p>
+          <p>Also, see Jasmin to purchase a #NOMERCYLINEDANCING Shirt and join us for free partner dance lessons the first Saturday of each month.</p>
+          <a class="btn" href="https://mavericksdf.org/donate/" target="_blank" rel="noreferrer">Support the Mavericks ↗</a>
+        </div>
+        <div class="info teal">
+          <h3>Show Neon Boots Some Love</h3>
+          <p>Make sure to show your thanks to Neon Boots for hosting us today by buying a drink, tipping your bartenders, and checking out the great merch up front.</p>
+          <p>Neon Boots Line Dance Lessons are Thursdays at 7:30 and 8:15 with open dancing starting at 7, $5 cover, mostly line dancing all the way until midnight.</p>
+          <a class="btn" href="https://nb-lessons2.web.app" target="_blank" rel="noreferrer">Lesson Schedule ↗</a>
+        </div>
+        <button class="btn" type="button" onclick="resetSurvey()">Start another response</button>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUlPvBo4wSphyyDsrgPjZFfq4gImgo02gwFwApgNQRU2M7tT4t5AhZgrqRx-LWdyQ/exec';
+
+    const state = {
+      screen: 1,
+      screenHistory: [],
+      havingFun: null,
+      unhappyNote: '',
+      eventDifficulty: '',
+      eventGenreMix: '',
+      walkthroughs: '',
+      favoriteStyles: [],
+      attendeeType: '',
+      lessonDifficulty: '',
+      lessonGenreMix: '',
+      lessonPacing: '',
+      regularNotes: '',
+      visitorHomeScene: '',
+      visitorHowHeard: '',
+      visitorNotes: ''
+    };
+
+    const singleOptions = {
+      eventDifficulty: ['Too easy', 'Fun and varied', 'A little tough', 'Way too hard'],
+      eventGenreMix: ['Too country', 'Fun and varied', 'More country please!'],
+      walkthroughs: ['Too fast', 'A helpful little reminder', 'A waste of time - just dance!'],
+      lessonDifficulty: ['Too easy', 'Fun and varied', 'A little tough', 'Way too hard'],
+      lessonGenreMix: ['Too country', 'Fun and varied', 'More country please!'],
+      lessonPacing: ['Too fast', 'Usually well-paced', 'Too slow']
+    };
+
+    const favoriteGroups = [
+      { tone: 'tone-yellow', options: ['Beginner', 'Improver', 'Intermediate', 'Advanced'] },
+      { tone: 'tone-teal', options: ['No tags', 'No restarts', 'Phrased', '2 wall', '4 wall', 'Counts <=32'] },
+      { tone: 'tone-pink', options: ['Musical', 'Has "that" moment', 'Easy to get', 'Satisfying to learn', 'A little different', 'Whatever is popular', 'Works well with song swaps', 'Lyrical', 'Technical', 'Bouncy', 'Smooth'] },
+      { tone: '', options: ['Slow', 'Fast'] },
+      { tone: 'tone-purple', options: ['Country', 'Pop', 'Latin', 'Hip-hop'] }
+    ];
+
+    function init() {
+      document.querySelectorAll('[data-single]').forEach((row) => {
+        const key = row.dataset.single;
+        row.innerHTML = singleOptions[key].map((option) =>
+          `<button class="pill" type="button" data-key="${key}" data-value="${escapeHtml(option)}">${escapeHtml(option)}</button>`
+        ).join('');
+      });
+
+      document.getElementById('favoriteStyles').innerHTML = favoriteGroups.map((group) =>
+        `<div class="cloud">${group.options.map((option) =>
+          `<button class="pill ${group.tone}" type="button" data-favorite="${escapeHtml(option)}">${escapeHtml(option)}</button>`
+        ).join('')}</div>`
+      ).join('');
+
+      document.body.addEventListener('click', handlePillClick);
+      ['visitorHomeScene', 'visitorHowHeard'].forEach((id) => {
+        document.getElementById(id).addEventListener('input', (event) => {
+          state[id] = event.target.value;
+          render();
+        });
+      });
+      render();
+    }
+
+    function handlePillClick(event) {
+      const button = event.target.closest('.pill');
+      if (!button) return;
+
+      if (button.dataset.key) {
+        state[button.dataset.key] = button.dataset.value;
+      }
+
+      if (button.dataset.favorite) {
+        const value = button.dataset.favorite;
+        state.favoriteStyles = state.favoriteStyles.includes(value)
+          ? state.favoriteStyles.filter((item) => item !== value)
+          : state.favoriteStyles.concat(value);
+      }
+
+      render();
+    }
+
+    function happy() {
+      state.havingFun = true;
+      setTimeout(() => goTo(2), 520);
+    }
+
+    function launchGlitterBoots() {
+      const burst = document.getElementById('party-burst');
+      const pieces = ['👢', '✨', '✦', '★', '✧', '💖'];
+      burst.replaceChildren();
+
+      for (let i = 0; i < 34; i += 1) {
+        const piece = document.createElement('span');
+        const isBoot = i % 5 === 0;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = isBoot ? 110 + Math.random() * 120 : 70 + Math.random() * 190;
+        const driftX = Math.cos(angle) * distance;
+        const driftY = Math.sin(angle) * distance - 40 - Math.random() * 70;
+
+        piece.className = `party-piece${isBoot ? ' boot' : ''}`;
+        piece.textContent = isBoot ? '👢' : pieces[Math.floor(Math.random() * (pieces.length - 1)) + 1];
+        piece.style.setProperty('--x', `${24 + Math.random() * 52}%`);
+        piece.style.setProperty('--y', `${26 + Math.random() * 34}%`);
+        piece.style.setProperty('--dx', `${driftX}px`);
+        piece.style.setProperty('--dy', `${driftY}px`);
+        piece.style.setProperty('--spin', `${Math.random() > .5 ? '' : '-'}${160 + Math.random() * 380}deg`);
+        piece.style.setProperty('--size', `${isBoot ? 28 + Math.random() * 14 : 16 + Math.random() * 16}px`);
+        piece.style.setProperty('--duration', `${950 + Math.random() * 420}ms`);
+        piece.style.animationDelay = `${Math.random() * 90}ms`;
+        burst.appendChild(piece);
+      }
+
+      setTimeout(() => burst.replaceChildren(), 1500);
+    }
+
+    function unhappy() {
+      state.havingFun = false;
+      document.getElementById('unhappy-box').style.display = 'block';
+      render();
+    }
+
+    function setAttendee(type) {
+      state.attendeeType = type;
+      goTo(4);
+    }
+
+    function continueFromEvent() {
+      syncTextFields();
+      if (!validateCurrentScreen()) return;
+      goTo(3);
+    }
+
+    function goTo(screen, options = {}) {
+      if (screen !== state.screen && !options.skipHistory) {
+        state.screenHistory.push(state.screen);
+      }
+      state.screen = screen;
+      render();
+      launchGlitterBoots();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBack() {
+      const previousScreen = state.screenHistory.pop();
+      if (!previousScreen) return;
+
+      state.screen = previousScreen;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function submitSurvey() {
+      clearErrors();
+      syncTextFields();
+      if (!validateCurrentScreen()) return;
+
+      if (!SCRIPT_URL || SCRIPT_URL === 'PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE') {
+        showError('Survey submit URL is not configured yet.');
+        return;
+      }
+
+      setSubmitting(true);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(buildPayload())
+        });
+
+        setSubmitting(false);
+        goTo(5);
+      } catch (error) {
+        setSubmitting(false);
+        showError('The survey could not submit. Please try again.');
+      }
+    }
+
+    function buildPayload() {
+      const base = {
+        havingFun: state.havingFun,
+        submittedAt: new Date().toISOString()
+      };
+
+      if (!state.havingFun) {
+        return {
+          ...base,
+          unhappyNote: state.unhappyNote.trim()
+        };
+      }
+
+      const eventPayload = {
+        ...base,
+        eventDifficulty: state.eventDifficulty,
+        eventGenreMix: state.eventGenreMix,
+        walkthroughs: state.walkthroughs,
+        favoriteStyles: state.favoriteStyles,
+        attendeeType: state.attendeeType
+      };
+
+      if (state.attendeeType === 'regular') {
+        return {
+          ...eventPayload,
+          lessonDifficulty: state.lessonDifficulty,
+          lessonGenreMix: state.lessonGenreMix,
+          lessonPacing: state.lessonPacing,
+          visitorNotes: state.regularNotes.trim()
+        };
+      }
+
+      return {
+        ...eventPayload,
+        visitorHomeScene: state.visitorHomeScene.trim(),
+        visitorHowHeard: state.visitorHowHeard.trim(),
+        visitorNotes: state.visitorNotes.trim()
+      };
+    }
+
+    function syncTextFields() {
+      state.unhappyNote = document.getElementById('unhappyNote').value;
+      state.regularNotes = document.getElementById('regularNotes').value;
+      state.visitorHomeScene = document.getElementById('visitorHomeScene').value;
+      state.visitorHowHeard = document.getElementById('visitorHowHeard').value;
+      state.visitorNotes = document.getElementById('visitorNotes').value;
+    }
+
+    function validateCurrentScreen() {
+      const missingId = getFirstMissingFieldId();
+      if (!missingId) return true;
+
+      showMissingField(missingId);
+      return false;
+    }
+
+    function getFirstMissingFieldId() {
+      if (state.screen === 1 && state.havingFun === false && !state.unhappyNote.trim()) {
+        return 'unhappyNote';
+      }
+
+      if (state.screen === 2) {
+        if (!state.eventDifficulty) return 'field-eventDifficulty';
+        if (!state.eventGenreMix) return 'field-eventGenreMix';
+        if (!state.walkthroughs) return 'field-walkthroughs';
+        if (!state.favoriteStyles.length) return 'field-favoriteStyles';
+      }
+
+      if (state.screen === 4 && state.attendeeType === 'regular') {
+        if (!state.lessonDifficulty) return 'field-lessonDifficulty';
+        if (!state.lessonGenreMix) return 'field-lessonGenreMix';
+        if (!state.lessonPacing) return 'field-lessonPacing';
+      }
+
+      if (state.screen === 4 && state.attendeeType === 'visitor') {
+        if (!state.visitorHomeScene.trim()) return 'field-visitorHomeScene';
+        if (!state.visitorHowHeard.trim()) return 'field-visitorHowHeard';
+      }
+
+      return '';
+    }
+
+    function showMissingField(id) {
+      const field = document.getElementById(id);
+      if (!field) return;
+
+      field.classList.remove('required-missing');
+      void field.offsetWidth;
+      field.classList.add('required-missing');
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (field.matches('input, textarea')) {
+        setTimeout(() => field.focus({ preventScroll: true }), 260);
+      } else {
+        const firstButton = field.querySelector('button');
+        if (firstButton) setTimeout(() => firstButton.focus({ preventScroll: true }), 260);
+      }
+    }
+
+    function render() {
+      document.querySelectorAll('.screen').forEach((screen) => {
+        screen.classList.remove('active');
+        screen.hidden = true;
+      });
+
+      let activeScreenId = `screen-${state.screen}`;
+
+      if (state.screen === 4 && state.attendeeType === 'regular') {
+        activeScreenId = 'screen-4a';
+      } else if (state.screen === 4 && state.attendeeType === 'visitor') {
+        activeScreenId = 'screen-4b';
+      }
+
+      const activeScreen = document.getElementById(activeScreenId);
+      activeScreen.hidden = false;
+      activeScreen.classList.add('active');
+
+      const badgeLabels = {
+        1: 'Vibe check',
+        2: "Today's event",
+        3: 'Who are you?',
+        4: state.attendeeType === 'visitor' ? 'Visitors' : 'Thursday lessons',
+        5: 'Thank you'
+      };
+      document.getElementById('screen-badge').textContent = badgeLabels[state.screen];
+      document.getElementById('back-button').disabled = state.screenHistory.length === 0;
+
+      const progress = document.getElementById('progress');
+      progress.hidden = state.screen === 1;
+      progress.innerHTML = Array.from({ length: 5 }, (_, index) =>
+        `<div class="bar ${index + 1 <= state.screen ? 'active' : ''}"></div>`
+      ).join('');
+
+      document.querySelectorAll('[data-key]').forEach((button) => {
+        button.classList.toggle('selected', state[button.dataset.key] === button.dataset.value);
+      });
+
+      document.querySelectorAll('[data-favorite]').forEach((button) => {
+        button.classList.toggle('selected', state.favoriteStyles.includes(button.dataset.favorite));
+      });
+
+      setSoftDisabled('continue-2', !(state.eventDifficulty && state.eventGenreMix && state.walkthroughs && state.favoriteStyles.length));
+      setSoftDisabled('submit-regular', !(state.lessonDifficulty && state.lessonGenreMix && state.lessonPacing));
+      setSoftDisabled('submit-visitor', !(state.visitorHomeScene.trim() && state.visitorHowHeard.trim()));
+    }
+
+    function setSoftDisabled(id, isDisabled) {
+      const button = document.getElementById(id);
+      button.classList.toggle('is-disabled', isDisabled);
+      button.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+    }
+
+    function setSubmitting(isSubmitting) {
+      document.querySelectorAll('[data-submit]').forEach((button) => {
+        button.disabled = isSubmitting ? true : false;
+        button.textContent = isSubmitting ? 'Submitting...' : 'Submit';
+      });
+      if (!isSubmitting) render();
+    }
+
+    function showError(message) {
+      const id = state.screen === 1 ? 'error-1' : state.attendeeType === 'regular' ? 'error-4a' : 'error-4b';
+      const box = document.getElementById(id);
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error').forEach((box) => {
+        box.textContent = '';
+        box.style.display = 'none';
+      });
+    }
+
+    function resetSurvey() {
+      Object.assign(state, {
+        screen: 1,
+        screenHistory: [],
+        havingFun: null,
+        unhappyNote: '',
+        eventDifficulty: '',
+        eventGenreMix: '',
+        walkthroughs: '',
+        favoriteStyles: [],
+        attendeeType: '',
+        lessonDifficulty: '',
+        lessonGenreMix: '',
+        lessonPacing: '',
+        regularNotes: '',
+        visitorHomeScene: '',
+        visitorHowHeard: '',
+        visitorNotes: ''
+      });
+      ['unhappyNote', 'regularNotes', 'visitorHomeScene', 'visitorHowHeard', 'visitorNotes'].forEach((id) => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('unhappy-box').style.display = 'none';
+      render();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    init();
+  </script>
+</body>
+</html>

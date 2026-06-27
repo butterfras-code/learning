@@ -98,11 +98,6 @@
         }
         .animate-milestone-flash { animation: milestone-flash 0.35s cubic-bezier(0.2, 0.8, 0.4, 1); }
 
-        @keyframes bit-live {
-            0%, 100% { opacity: 1; }
-            50%       { opacity: 0.15; }
-        }
-
         .invert-on-hover { transition: all 0.2s ease; cursor: pointer; }
         .invert-on-hover:hover {
             background-color: var(--theme-ink) !important;
@@ -160,18 +155,6 @@
         const CHUNK_SIZE = 1500;
         const BRUTALIST_ERROR_RED = '#FF003C';
         const BOX_SPIN_CLASSES = ['animate-box-spin-1', 'animate-box-spin-2', 'animate-box-spin-3', 'animate-box-spin-4'];
-        const BIT_COLORS = [
-            '#4B6FFF', // bit 0  — value 1
-            '#4BB8FF', // bit 1  — value 2
-            '#4BFFE0', // bit 2  — value 4
-            '#4BFF8A', // bit 3  — value 8
-            '#A0FF4B', // bit 4  — value 16
-            '#FFE24B', // bit 5  — value 32
-            '#FFB34B', // bit 6  — value 64
-            '#FF7A4B', // bit 7  — value 128
-            '#FF4B4B', // bit 8  — value 256
-            '#FF4BB8', // bit 9  — value 512
-        ];
 
         const GITHUB_REPOS = [
             {
@@ -200,7 +183,7 @@
             .replace(/[“”„‟″«»]/g, '"') // curly double quotes, double prime, angle quotes
             .replace(/…/g, '...')                              // ellipsis
             .replace(/[    　]/g, ' ')     // non-breaking and narrow spaces
-            .replace(/[\u200B-\u200F\u2028\u2029\uFEFF\u00AD]/g, "") // zero-width, line/para separators, soft hyphen
+            .replace(/[​-‏﻿­]/g, '') // zero-width, line/para separators, soft hyphen
             .replace(/[•‣⁃◦]/g, '-')            // bullets
             .replace(/×/g, 'x')                                // multiplication sign
             .replace(/÷/g, '/')                                // division sign
@@ -555,7 +538,7 @@
 
             useEffect(() => {
                 if (streak > maxStreak) {
-                    for (let bit = 9; bit >= 0; bit--) {
+                    for (let bit = 7; bit >= 0; bit--) {
                         if (streak >= (1 << bit) && maxStreak < (1 << bit)) {
                             if (milestoneBitTimerRef.current) clearTimeout(milestoneBitTimerRef.current);
                             setMilestoneBit(bit);
@@ -568,7 +551,6 @@
             }, [streak, maxStreak]);
 
             const handleKeyDown = (e) => {
-                if (e.key === ' ' && e.target === typingAreaRef.current) e.preventDefault();
                 if (e.ctrlKey || e.metaKey || e.altKey) return;
                 if (e.key === 'Shift' || e.key === 'CapsLock' || e.key === 'Tab') return;
 
@@ -645,6 +627,7 @@
                 }
 
                 if (e.key.length === 1) {
+                    e.preventDefault();
                     processKeystroke(e.key);
                 }
             };
@@ -757,7 +740,7 @@
                     if (!page.extract || page.extract.trim().length < 10) { setWikiError('Article has no content. Try another.'); return; }
 
                     setWikiArticleTitle(page.title);
-                    setSourceText(normalizeText(sanitizeText(page.extract)));
+                    setSourceText(normalizeText(page.extract));
                     resetProgress();
                 } catch {
                     setWikiError('Failed to load article.');
@@ -789,7 +772,7 @@
 
                     setWikiArticleTitle(page.title);
                     setWikiUrl(summary.title);
-                    setSourceText(normalizeText(sanitizeText(page.extract)));
+                    setSourceText(normalizeText(page.extract));
                     resetProgress();
                 } catch {
                     setWikiError('Failed to load random article.');
@@ -992,51 +975,23 @@
                                 <div className="text-5xl">{stats.accuracy}% <span className="text-sm opacity-60">ACC</span></div>
                                 <div className="flex flex-col pb-1 leading-none gap-1">
                                     <div className="flex gap-[2px] font-terminal">
-                                        {Array.from({length: 10}, (_, i) => {
-                                            const bitPos = 9 - i;
-                                            const color = BIT_COLORS[bitPos];
-                                            const currentBit = (streak >> bitPos) & 1;
-                                            const maxBit = (maxStreak >> bitPos) & 1;
-                                            const currentDotLit = streak >= (1 << bitPos);
-                                            const maxDotLit = maxStreak >= (1 << bitPos);
+                                        {Array.from({length: 8}, (_, i) => {
+                                            const bitPos = 7 - i;
+                                            const bitValue = (maxStreak >> bitPos) & 1;
+                                            const dotLit = maxStreak >= (1 << bitPos);
                                             const isFlashing = milestoneBit === bitPos;
-                                            const displayBit = currentBit || maxBit;
-
-                                            const flashDuration = (2.5 - bitPos * 0.22).toFixed(2);
-                                            const glowRadius = Math.round(bitPos * 1.5 + 2);
-
-                                            const digitStyle = currentBit ? {
-                                                color,
-                                                textShadow: `0 0 ${glowRadius}px ${color}`,
-                                                animation: `bit-live ${flashDuration}s ease-in-out infinite`,
-                                            } : maxBit ? {
-                                                color, opacity: 0.25,
-                                            } : {
-                                                opacity: 0.10,
-                                            };
-
-                                            const dotStyle = currentDotLit ? {
-                                                backgroundColor: color,
-                                                boxShadow: `0 0 ${glowRadius}px ${color}`,
-                                                animation: `bit-live ${flashDuration}s ease-in-out infinite`,
-                                            } : maxDotLit ? {
-                                                backgroundColor: color, opacity: 0.25,
-                                            } : {
-                                                backgroundColor: 'currentColor', opacity: 0.10,
-                                            };
-
                                             return (
                                                 <div key={bitPos} className={`flex flex-col items-center ${isFlashing ? 'animate-milestone-flash' : ''}`} style={{width: '1.25ch'}}>
-                                                    <span className="text-xl leading-none" style={digitStyle}>{displayBit}</span>
-                                                    <div className="w-1.5 h-1.5 rounded-full mt-[3px]" style={dotStyle} />
+                                                    <span className={`text-xl leading-none ${bitValue ? 'opacity-100' : 'opacity-20'}`}>{bitValue}</span>
+                                                    <div className={`w-1.5 h-1.5 rounded-full mt-[3px] ${dotLit ? 'opacity-100' : 'opacity-10'}`} style={{backgroundColor: 'currentColor'}} />
                                                 </div>
                                             );
                                         })}
                                     </div>
                                     <div className="flex items-center gap-2 text-sm uppercase tracking-wide">
-                                        <span>NOW {streak}</span>
+                                        <span className="opacity-60">BEST ({maxStreak})</span>
                                         <span className="opacity-20 select-none">·</span>
-                                        <span className="opacity-40">BEST {maxStreak}</span>
+                                        <span>NOW {streak}</span>
                                         <button onMouseDown={e => e.preventDefault()} onClick={() => { setMaxStreak(0); setMilestoneBit(-1); }} className="opacity-30 hover:opacity-100 transition-opacity border border-current px-1 leading-tight" title="Reset best streak">×</button>
                                     </div>
                                 </div>
@@ -1122,7 +1077,7 @@
                     {showLibrary && (
                         <LibraryModal
                             onClose={() => { setShowLibrary(false); typingAreaRef.current?.focus(); }}
-                            onImport={text => { setSourceText(normalizeText(sanitizeText(text))); setIsCodeMode(false); resetProgress(); }}
+                            onImport={text => { setSourceText(normalizeText(text)); setIsCodeMode(false); resetProgress(); }}
                             currentPanel={currentPanel}
                             currentInk={currentInk}
                             currentSurface={currentSurface}
